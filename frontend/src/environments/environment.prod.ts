@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  apiUrl: 'http://localhost:8084'
+  apiUrl: 'https://bookstore-api-4172.onrender.com'
 };
