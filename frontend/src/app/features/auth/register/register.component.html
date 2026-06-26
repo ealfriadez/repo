@@ -1,0 +1,99 @@
+<div class="auth-container">
+  <div class="auth-branding">
+    <div class="branding-content">
+      <div class="branding-logo">
+        <span class="material-icons-outlined">auto_stories</span>
+        <span>Bookstore AI</span>
+      </div>
+
+      <div class="branding-illustration">
+        <span class="material-icons-outlined illustration-icon">menu_book</span>
+      </div>
+
+      <h1>Conectamos lectores con librerías independientes</h1>
+
+      <div class="branding-features">
+        <div class="feature-item">
+          <div class="feature-icon">
+            <span class="material-icons-outlined">psychology</span>
+          </div>
+          <p>Catálogo inteligente con recomendaciones personalizadas por IA</p>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon">
+            <span class="material-icons-outlined">shopping_cart</span>
+          </div>
+          <p>Compra y vende libros online</p>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon">
+            <span class="material-icons-outlined">download</span>
+          </div>
+          <p>Descarga tus libros al instante</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="auth-form-panel">
+    <div class="auth-form-content">
+      <h2>Crea tu cuenta</h2>
+
+      <form [formGroup]="registerForm" (ngSubmit)="register()">
+        <div class="form-row">
+          <mat-form-field appearance="outline" class="half-width">
+            <mat-label>Nombre</mat-label>
+            <input matInput formControlName="firstName">
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="half-width">
+            <mat-label>Apellido</mat-label>
+            <input matInput formControlName="lastName">
+          </mat-form-field>
+        </div>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>E-mail</mat-label>
+          <input matInput type="email" formControlName="email">
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Contraseña</mat-label>
+          <input matInput [type]="hidePassword() ? 'password' : 'text'"
+                 formControlName="password">
+          <button mat-icon-button matSuffix type="button" (click)="hidePassword.set(!hidePassword())">
+            <mat-icon>{{ hidePassword() ? 'visibility_off' : 'visibility' }}</mat-icon>
+          </button>
+          @if (registerForm.get('password')?.hasError('pattern') && registerForm.get('password')?.touched) {
+            <mat-error>Minimo 8 caracteres, mayuscula, minuscula, numero y caracter especial</mat-error>
+          }
+        </mat-form-field>
+
+        <div class="form-row">
+          <mat-form-field appearance="outline" class="half-width">
+            <mat-label>DNI</mat-label>
+            <input matInput formControlName="dni">
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="half-width">
+            <mat-label>Teléfono (opcional)</mat-label>
+            <input matInput formControlName="phone">
+          </mat-form-field>
+        </div>
+
+        <button mat-raised-button class="btn-primary-full" type="submit"
+                [disabled]="loading() || registerForm.invalid">
+          @if (loading()) {
+            Registrando...
+          } @else {
+            Registrarse
+          }
+        </button>
+      </form>
+
+      <p class="auth-footer-text">
+        ¿Ya tienes cuenta? <a routerLink="/login">Inicia sesión</a>
+      </p>
+    </div>
+  </div>
+</div>

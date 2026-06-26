@@ -1,0 +1,265 @@
+/* Barra de navegación — estilos específicos del componente */
+
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000;
+  padding: 12px 0;
+  transition: all 0.3s ease;
+  background: var(--primary, #1a1a2e);
+  box-shadow: 0 2px 20px rgba(0, 0, 0, 0.3);
+}
+
+.nav-container {
+  max-width: var(--max-width, 1200px);
+  margin: 0 auto;
+  padding: 0 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.nav-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--white, #ffffff);
+  font-family: 'Poppins', sans-serif;
+  font-weight: 700;
+  font-size: 1.4rem;
+  text-decoration: none;
+}
+
+.logo-icon {
+  font-size: 1.8rem;
+  color: var(--secondary, #e2b04a);
+}
+
+.nav-menu {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.nav-menu a {
+  color: rgba(255, 255, 255, 0.85);
+  font-weight: 500;
+  font-size: 0.95rem;
+  text-decoration: none;
+  position: relative;
+  padding: 4px 0;
+  transition: color 0.3s ease;
+}
+
+.nav-menu a::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: var(--secondary, #e2b04a);
+  transition: width 0.3s ease;
+}
+
+.nav-menu a:hover {
+  color: var(--white, #ffffff);
+}
+
+.nav-menu a:hover::after,
+.nav-menu a.active::after {
+  width: 100%;
+}
+
+.nav-menu a.active {
+  color: var(--white, #ffffff);
+}
+
+/* Botón de enlace de navegación (desplegables) */
+.nav-link {
+  background: none;
+  border: none;
+  color: rgba(255, 255, 255, 0.85);
+  font-family: 'Inter', sans-serif;
+  font-weight: 500;
+  font-size: 0.95rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 0;
+  transition: color 0.3s ease;
+  text-decoration: none;
+}
+
+.nav-link:hover {
+  color: var(--white, #ffffff);
+}
+
+.nav-link .arrow {
+  font-size: 18px;
+  opacity: 0.7;
+}
+
+/* Sección de acciones (lado derecho) */
+.nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+/* Botón del carrito */
+.cart-btn {
+  color: rgba(255, 255, 255, 0.85);
+  display: flex;
+  align-items: center;
+  padding: 6px;
+  border-radius: 50%;
+  transition: all 0.3s ease;
+}
+
+.cart-btn:hover {
+  color: var(--white, #ffffff);
+  background: rgba(226, 176, 74, 0.15);
+}
+
+/* Botón de usuario */
+.user-btn {
+  gap: 8px;
+}
+
+.user-email {
+  max-width: 150px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* CTA secundario */
+.nav-cta-secondary {
+  padding: 10px 24px;
+  border-radius: 50px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  text-decoration: none;
+  color: var(--white, #ffffff);
+  border: 2px solid rgba(255, 255, 255, 0.4);
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+}
+
+.nav-cta-secondary:hover {
+  border-color: var(--secondary, #e2b04a);
+  color: var(--secondary, #e2b04a);
+}
+
+/* Botón CTA */
+.nav-cta {
+  padding: 10px 24px;
+  background: var(--secondary, #e2b04a);
+  color: var(--primary, #1a1a2e) !important;
+  border-radius: 50px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+}
+
+.nav-cta:hover {
+  background: #d4a03e;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 15px rgba(226, 176, 74, 0.4);
+}
+
+/* Links centrales (desktop: inline, mobile: oculto hasta hamburger) */
+.nav-links {
+  display: flex;
+  align-items: center;
+}
+
+/* Acciones mobile (ocultas en desktop) */
+.nav-actions-mobile {
+  display: none;
+}
+
+/* Hamburguesa (oculta en desktop) */
+.hamburger {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  cursor: pointer;
+  padding: 8px;
+  background: none;
+  border: none;
+}
+
+.hamburger span {
+  width: 24px;
+  height: 2px;
+  background: var(--white);
+  transition: all 0.3s ease;
+}
+
+/* ── Responsivo móvil ── */
+@media (max-width: 768px) {
+  .hamburger {
+    display: flex;
+  }
+
+  .nav-links {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: var(--primary);
+    flex-direction: column;
+    padding: 24px;
+    box-shadow: var(--shadow-md);
+    z-index: 100;
+  }
+
+  .nav-links.active {
+    display: flex;
+  }
+
+  .nav-links .nav-menu {
+    flex-direction: column;
+    gap: 12px;
+    text-align: center;
+  }
+
+  .nav-links .nav-menu a {
+    font-size: 1.05rem;
+    padding: 8px 0;
+  }
+
+  .nav-actions {
+    display: none !important;
+  }
+
+  .nav-links.active .nav-actions-mobile {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 16px;
+    padding-top: 16px;
+    border-top: 1px solid rgba(255,255,255,0.1);
+  }
+
+  .nav-logo {
+    font-size: 1.1rem;
+  }
+
+  .user-email {
+    display: none;
+  }
+}

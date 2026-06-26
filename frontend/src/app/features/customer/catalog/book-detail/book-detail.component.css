@@ -1,0 +1,341 @@
+/* Detalle de Libro — estilos específicos del componente */
+
+.btn-cart {
+  background-color: #e2b04a !important;
+  color: #1a1a2e !important;
+  border-radius: 50px !important;
+  font-weight: 600 !important;
+  font-size: 1rem !important;
+  padding: 0 32px !important;
+  height: 48px !important;
+  margin-top: 16px !important;
+  --mat-button-filled-container-color: #e2b04a !important;
+  --mat-button-filled-label-text-color: #1a1a2e !important;
+}
+
+.btn-cart:hover {
+  background-color: #d4a03e !important;
+  box-shadow: 0 4px 15px rgba(226, 176, 74, 0.4) !important;
+  transform: translateY(-2px);
+}
+
+.btn-cart:disabled {
+  opacity: 0.5 !important;
+}
+
+.detail-container {
+  max-width: 1200px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+}
+
+.detail-content {
+  display: flex;
+  gap: 32px;
+  margin-top: 16px;
+}
+
+.book-image {
+  flex: 0 0 300px;
+}
+
+.book-image img {
+  width: 100%;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-md);
+}
+
+.no-image {
+  width: 300px;
+  height: 400px;
+  background: var(--light);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius);
+}
+
+.no-image mat-icon {
+  font-size: 80px;
+  width: 80px;
+  height: 80px;
+  color: #ccc;
+}
+
+.book-info {
+  flex: 1;
+}
+
+.book-info h1 {
+  margin: 0 0 8px;
+  font-family: 'Poppins', sans-serif;
+  color: var(--primary);
+  font-weight: 700;
+}
+
+.author {
+  color: #666;
+  font-size: 1.1em;
+  margin-bottom: 12px;
+  font-family: 'Inter', sans-serif;
+}
+
+.price {
+  font-size: 2em;
+  font-weight: bold;
+  color: var(--secondary);
+  margin: 16px 0;
+  font-family: 'Poppins', sans-serif;
+}
+
+.stock {
+  color: #2e7d32;
+  font-weight: 500;
+  font-family: 'Inter', sans-serif;
+}
+
+.low-stock {
+  color: #e65100;
+  font-weight: bold;
+}
+
+.description {
+  margin: 16px 0;
+  line-height: 1.6;
+  font-family: 'Inter', sans-serif;
+  color: #444;
+}
+
+.login-prompt {
+  margin-top: 16px;
+}
+
+.login-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--secondary, #e2b04a);
+  font-weight: 500;
+  font-size: 0.9rem;
+  text-decoration: none;
+}
+
+.login-link:hover {
+  text-decoration: underline;
+}
+
+.login-link .mat-icon {
+  font-size: 18px;
+  width: 18px;
+  height: 18px;
+}
+
+.loading {
+  text-align: center;
+  padding: 48px;
+}
+
+/* Sección de Reseñas */
+.reviews-section {
+  margin-top: 32px;
+  padding-top: 32px;
+  border-top: 1px solid var(--gray-200, #e0e0e0);
+}
+
+.reviews-section h2 {
+  font-family: 'Poppins', sans-serif;
+  font-size: 1.4rem;
+  color: var(--primary, #1a1a2e);
+  margin-bottom: 24px;
+}
+
+.reviews-layout {
+  display: grid;
+  grid-template-columns: 1fr 1.5fr;
+  gap: 32px;
+  align-items: start;
+}
+
+/* Panel de formulario */
+.review-form-panel {
+  background: var(--white, #fff);
+  border-radius: var(--radius, 12px);
+  padding: 24px;
+  box-shadow: var(--shadow-sm);
+  position: sticky;
+  top: 80px;
+}
+
+.review-form-panel h3 {
+  font-family: 'Poppins', sans-serif;
+  font-size: 1.1rem;
+  color: var(--primary, #1a1a2e);
+  margin-bottom: 16px;
+}
+
+.star-rating {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 16px;
+}
+
+.star {
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.star:hover {
+  transform: scale(1.2);
+}
+
+.star .material-icons-outlined {
+  font-size: 32px;
+  color: var(--gray-300, #ccc);
+}
+
+.star.filled .material-icons-outlined {
+  color: #e2b04a;
+}
+
+/* Mi reseña */
+.my-review {
+  margin-top: 8px;
+}
+
+.my-review .review-stars {
+  margin-bottom: 12px;
+}
+
+.my-review-comment {
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: var(--gray-700, #444);
+  margin-bottom: 16px;
+}
+
+.my-review-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.btn-edit {
+  color: var(--secondary, #e2b04a) !important;
+  font-weight: 600;
+}
+
+.btn-delete {
+  color: var(--danger, #c62828) !important;
+  font-weight: 600;
+}
+
+.btn-cancel {
+  width: 100%;
+  margin-top: 8px;
+  color: var(--gray-500, #888) !important;
+}
+
+.btn-submit-review {
+  width: 100%;
+  background-color: #e2b04a !important;
+  color: #1a1a2e !important;
+  border-radius: 50px !important;
+  font-weight: 600 !important;
+  height: 42px !important;
+  --mat-button-filled-container-color: #e2b04a !important;
+  --mat-button-filled-label-text-color: #1a1a2e !important;
+}
+
+/* Lista de reseñas */
+.reviews-list-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.review-card {
+  background: var(--white, #fff);
+  border-radius: var(--radius, 12px);
+  padding: 20px;
+  box-shadow: var(--shadow-sm);
+}
+
+.review-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 8px;
+}
+
+.reviewer-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.reviewer-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--secondary, #e2b04a);
+  color: var(--primary, #1a1a2e);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 700;
+  font-size: 0.85rem;
+}
+
+.reviewer-name {
+  font-weight: 600;
+  color: var(--primary, #1a1a2e);
+  font-size: 0.95rem;
+}
+
+.review-stars {
+  display: flex;
+  gap: 1px;
+}
+
+.star-icon {
+  font-size: 16px !important;
+  color: var(--gray-300, #ccc);
+}
+
+.star-icon.filled {
+  color: #e2b04a;
+}
+
+.review-comment {
+  font-size: 0.9rem;
+  line-height: 1.6;
+  color: var(--gray-600, #666);
+}
+
+.no-reviews {
+  text-align: center;
+  color: var(--gray-500, #888);
+  padding: 32px;
+  font-size: 0.95rem;
+}
+
+.btn-load-more {
+  align-self: center;
+  color: var(--secondary, #e2b04a) !important;
+  font-weight: 600;
+}
+
+@media (max-width: 768px) {
+  .detail-content {
+    flex-direction: column;
+  }
+  .book-image {
+    flex: none;
+  }
+  .reviews-layout {
+    grid-template-columns: 1fr;
+  }
+  .review-form-panel {
+    position: static;
+  }
+}

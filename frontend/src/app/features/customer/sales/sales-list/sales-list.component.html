@@ -1,0 +1,97 @@
+<div class="page-container">
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>
+        Ventas ({{ totalElements() }})
+      </mat-card-title>
+    </mat-card-header>
+
+    <mat-card-content>
+      <!-- Filtros -->
+      <form [formGroup]="filterForm">
+        <div class="filters-row">
+          <mat-form-field appearance="outline" class="filter-field">
+            <mat-label>Desde</mat-label>
+            <input matInput [matDatepicker]="pickerFrom" formControlName="dateFrom">
+            <mat-datepicker-toggle matIconSuffix [for]="pickerFrom"></mat-datepicker-toggle>
+            <mat-datepicker #pickerFrom></mat-datepicker>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="filter-field">
+            <mat-label>Hasta</mat-label>
+            <input matInput [matDatepicker]="pickerTo" formControlName="dateTo">
+            <mat-datepicker-toggle matIconSuffix [for]="pickerTo"></mat-datepicker-toggle>
+            <mat-datepicker #pickerTo></mat-datepicker>
+          </mat-form-field>
+
+          <div class="filter-actions">
+            <button mat-raised-button color="primary" (click)="applyFilters()">
+              <mat-icon>search</mat-icon> Filtrar
+            </button>
+            <button mat-button (click)="clearFilters()">
+              <mat-icon>clear</mat-icon> Limpiar
+            </button>
+          </div>
+        </div>
+      </form>
+
+      <!-- Lista de ventas -->
+      <mat-accordion>
+        @for (sale of sales(); track sale.id) {
+          <mat-expansion-panel>
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                {{ sale.createdAt | date:'dd/MM/yyyy HH:mm' }}
+              </mat-panel-title>
+              <mat-panel-description>
+                Total: {{ sale.total | currency:'PEN':'S/. ' }}
+              </mat-panel-description>
+            </mat-expansion-panel-header>
+
+            <table mat-table [dataSource]="sale.items" class="full-width">
+              <ng-container matColumnDef="bookTitle">
+                <th mat-header-cell *matHeaderCellDef>Libro</th>
+                <td mat-cell *matCellDef="let item">{{ item.bookTitle }}</td>
+              </ng-container>
+
+              <ng-container matColumnDef="quantity">
+                <th mat-header-cell *matHeaderCellDef>Cantidad</th>
+                <td mat-cell *matCellDef="let item">{{ item.quantity }}</td>
+              </ng-container>
+
+              <ng-container matColumnDef="unitPrice">
+                <th mat-header-cell *matHeaderCellDef>Precio Unit.</th>
+                <td mat-cell *matCellDef="let item">{{ item.unitPrice | currency:'PEN':'S/. ' }}</td>
+              </ng-container>
+
+              <ng-container matColumnDef="subtotal">
+                <th mat-header-cell *matHeaderCellDef>Subtotal</th>
+                <td mat-cell *matCellDef="let item">{{ item.subtotal | currency:'PEN':'S/. ' }}</td>
+              </ng-container>
+
+              <tr mat-header-row *matHeaderRowDef="itemColumns"></tr>
+              <tr mat-row *matRowDef="let row; columns: itemColumns;"></tr>
+            </table>
+
+            <div class="sale-total">
+              <strong>Total: {{ sale.total | currency:'PEN':'S/. ' }}</strong>
+            </div>
+          </mat-expansion-panel>
+        }
+      </mat-accordion>
+
+      @if (sales().length === 0) {
+        <p class="empty-state">No se encontraron ventas.</p>
+      }
+
+      <mat-paginator
+        [length]="totalElements()"
+        [pageSize]="pageSize()"
+        [pageIndex]="pageIndex()"
+        [pageSizeOptions]="[5, 10, 25]"
+        (page)="onPageChange($event)"
+        showFirstLastButtons>
+      </mat-paginator>
+    </mat-card-content>
+  </mat-card>
+</div>

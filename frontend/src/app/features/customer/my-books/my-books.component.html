@@ -1,0 +1,54 @@
+<div class="my-books-container">
+  <!-- Barra de busqueda -->
+  <div class="search-bar">
+    <mat-form-field appearance="outline" class="search-field">
+      <mat-label>Buscar en mis libros</mat-label>
+      <form [formGroup]="searchForm">
+        <input matInput formControlName="search" (keyup.enter)="search()" placeholder="Titulo o autor...">
+      </form>
+      <button mat-icon-button matSuffix (click)="search()">
+        <mat-icon>search</mat-icon>
+      </button>
+    </mat-form-field>
+  </div>
+
+  @if (loading()) {
+    <div class="loading-state">
+      <mat-spinner diameter="48"></mat-spinner>
+    </div>
+  } @else if (books().length === 0) {
+    <div class="empty-state">
+      <span class="material-icons-outlined">library_books</span>
+      <p>No tienes libros comprados</p>
+    </div>
+  } @else {
+    <div class="books-list">
+      @for (book of books(); track book.id) {
+        <div class="book-item">
+          <div class="book-icon">
+            <span class="material-icons-outlined">auto_stories</span>
+          </div>
+          <div class="book-info">
+            <h4>{{ book.title }}</h4>
+            <p>{{ book.authorFullName }}</p>
+          </div>
+          @if (book.hasFile) {
+            <button mat-raised-button class="btn-download" (click)="download(book)">
+              <mat-icon>download</mat-icon> Descargar
+            </button>
+          } @else {
+            <span class="no-file">No disponible</span>
+          }
+        </div>
+      }
+    </div>
+
+    <mat-paginator
+      [length]="totalElements()"
+      [pageSize]="12"
+      [pageIndex]="page()"
+      (page)="onPage($event)"
+      showFirstLastButtons>
+    </mat-paginator>
+  }
+</div>

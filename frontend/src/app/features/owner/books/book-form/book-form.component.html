@@ -1,0 +1,143 @@
+<div class="form-container">
+  <form [formGroup]="bookForm" (ngSubmit)="saveBook()">
+    <div class="form-layout">
+      <!-- Columna izquierda: Formulario -->
+      <div class="form-column">
+        <mat-card class="form-card">
+          <mat-card-content>
+            <div class="form-section">
+              <h3>Información del libro</h3>
+              <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Título</mat-label>
+                <input matInput formControlName="title">
+                @if (bookForm.get('title')?.invalid && bookForm.get('title')?.touched) {
+                  <mat-error>El titulo es obligatorio</mat-error>
+                }
+              </mat-form-field>
+
+              @if (slugPreview()) {
+                <mat-form-field appearance="outline" class="full-width">
+                  <mat-label>Slug (auto-generado)</mat-label>
+                  <input matInput [value]="slugPreview()" readonly disabled>
+                </mat-form-field>
+              }
+
+              <div class="row-2">
+                <mat-form-field appearance="outline">
+                  <mat-label>Autor</mat-label>
+                  <mat-select formControlName="authorId">
+                    @for (author of authors(); track author.id) {
+                      <mat-option [value]="author.id">{{ author.firstName }} {{ author.lastName }}</mat-option>
+                    }
+                  </mat-select>
+                  @if (bookForm.get('authorId')?.invalid && bookForm.get('authorId')?.touched) {
+                    <mat-error>El autor es obligatorio</mat-error>
+                  }
+                </mat-form-field>
+                <mat-form-field appearance="outline">
+                  <mat-label>Género</mat-label>
+                  <input matInput formControlName="genre">
+                  @if (bookForm.get('genre')?.invalid && bookForm.get('genre')?.touched) {
+                    <mat-error>El genero es obligatorio</mat-error>
+                  }
+                </mat-form-field>
+              </div>
+
+              <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Descripción</mat-label>
+                <textarea matInput formControlName="description" rows="4"></textarea>
+              </mat-form-field>
+            </div>
+
+            <div class="form-section">
+              <h3>Precio y disponibilidad</h3>
+              <div class="row-3">
+                <mat-form-field appearance="outline">
+                  <mat-label>Precio (S/.)</mat-label>
+                  <input matInput type="number" formControlName="price" step="0.01">
+                  @if (bookForm.get('price')?.hasError('required') && bookForm.get('price')?.touched) {
+                    <mat-error>El precio es obligatorio</mat-error>
+                  } @else if (bookForm.get('price')?.hasError('min')) {
+                    <mat-error>El precio debe ser mayor a 0</mat-error>
+                  }
+                </mat-form-field>
+                <mat-form-field appearance="outline">
+                  <mat-label>Stock</mat-label>
+                  <input matInput type="number" formControlName="stock">
+                  @if (bookForm.get('stock')?.hasError('required') && bookForm.get('stock')?.touched) {
+                    <mat-error>El stock es obligatorio</mat-error>
+                  } @else if (bookForm.get('stock')?.hasError('min')) {
+                    <mat-error>El stock no puede ser negativo</mat-error>
+                  }
+                </mat-form-field>
+                <mat-form-field appearance="outline">
+                  <mat-label>Stock mínimo</mat-label>
+                  <input matInput type="number" formControlName="minStock">
+                </mat-form-field>
+              </div>
+            </div>
+
+            <div class="form-actions">
+              <button mat-stroked-button type="button" routerLink="/owner/books">Cancelar</button>
+              <button mat-raised-button class="btn-primary-full" type="submit" [disabled]="bookForm.invalid">
+                <mat-icon>save</mat-icon>
+                @if (isEditMode()) { Actualizar libro } @else { Crear libro }
+              </button>
+            </div>
+          </mat-card-content>
+        </mat-card>
+      </div>
+
+      <!-- Columna derecha: Preview + Archivos -->
+      <div class="preview-column">
+        <!-- Portada -->
+        <mat-card class="form-card">
+          <mat-card-content>
+            <h3>Portada</h3>
+            <div class="image-upload-area" (click)="imageInput.click()">
+              <input #imageInput type="file" accept="image/*" hidden (change)="onImageSelected($event)">
+              @if (imagePreview()) {
+                <img [src]="imagePreview()" alt="Vista previa" class="image-preview">
+                <button type="button" class="remove-btn" (click)="removeImage($event)">
+                  <span class="material-icons-outlined">close</span>
+                </button>
+              } @else {
+                <div class="upload-placeholder">
+                  <span class="material-icons-outlined">add_photo_alternate</span>
+                  <span class="upload-text">Click para subir portada</span>
+                  <span class="upload-hint">JPG, PNG (máx. 5MB)</span>
+                </div>
+              }
+            </div>
+          </mat-card-content>
+        </mat-card>
+
+        <!-- Archivo digital -->
+        <mat-card class="form-card">
+          <mat-card-content>
+            <h3>Archivo digital</h3>
+            <div class="file-upload-area" (click)="bookFileInput.click()">
+              <input #bookFileInput type="file" accept=".pdf,.epub" hidden (change)="onBookFileSelected($event)">
+              @if (selectedBookFile()) {
+                <div class="file-info">
+                  <span class="material-icons-outlined file-icon">description</span>
+                  <span class="file-name">{{ selectedBookFile()!.name }}</span>
+                  <span class="file-size">{{ formatFileSize(selectedBookFile()!.size) }}</span>
+                </div>
+                <button type="button" class="remove-btn" (click)="removeBookFile($event)">
+                  <span class="material-icons-outlined">close</span>
+                </button>
+              } @else {
+                <div class="upload-placeholder">
+                  <span class="material-icons-outlined">upload_file</span>
+                  <span class="upload-text">Click para subir archivo</span>
+                  <span class="upload-hint">PDF o EPUB</span>
+                </div>
+              }
+            </div>
+          </mat-card-content>
+        </mat-card>
+      </div>
+    </div>
+  </form>
+</div>

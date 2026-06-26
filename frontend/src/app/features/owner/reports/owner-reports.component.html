@@ -1,0 +1,120 @@
+<div class="reports-container">
+  <!-- Toggle entre modos -->
+  <div class="mode-toggle">
+    <button [class.active]="mode() === 'filters'" (click)="mode.set('filters')">
+      <span class="material-icons-outlined">bar_chart</span> Filtros
+    </button>
+    <button [class.active]="mode() === 'ia'" (click)="mode.set('ia')">
+      <span class="material-icons-outlined">auto_awesome</span> Consultar con IA
+    </button>
+  </div>
+
+  @if (mode() === 'filters') {
+    <!-- Modo filtros tradicionales -->
+    <form [formGroup]="filterForm">
+      <div class="filters-row">
+        <mat-form-field appearance="outline" class="filter-field">
+          <mat-label>Desde</mat-label>
+          <input matInput [matDatepicker]="fromPicker" formControlName="dateFrom">
+          <mat-datepicker-toggle matIconSuffix [for]="fromPicker"></mat-datepicker-toggle>
+          <mat-datepicker #fromPicker></mat-datepicker>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="filter-field">
+          <mat-label>Hasta</mat-label>
+          <input matInput [matDatepicker]="toPicker" formControlName="dateTo">
+          <mat-datepicker-toggle matIconSuffix [for]="toPicker"></mat-datepicker-toggle>
+          <mat-datepicker #toPicker></mat-datepicker>
+        </mat-form-field>
+
+        <button mat-raised-button class="btn-generate" (click)="generateReport()" [disabled]="loading()">
+          <mat-icon>search</mat-icon> Generar reporte
+        </button>
+
+        <button mat-button class="btn-clear" (click)="clearFilters()">
+          <mat-icon>clear</mat-icon> Limpiar filtros
+        </button>
+      </div>
+
+      @if (dateError) {
+        <p class="field-error" style="color: #f44336; margin: -8px 0 12px 0; font-size: 13px;">La fecha fin no puede ser menor a la fecha inicio</p>
+      }
+    </form>
+
+    @if (loading()) {
+      <div class="loading-state">
+        <mat-spinner diameter="48"></mat-spinner>
+      </div>
+    } @else if (hasData()) {
+      <div class="chart-card">
+        <h3>Ventas por mes</h3>
+        <canvas baseChart
+          [data]="monthlySalesData()"
+          [type]="'bar'"
+          [options]="chartOptions">
+        </canvas>
+      </div>
+
+      <div class="chart-card">
+        <h3>Top libros vendidos</h3>
+        <canvas baseChart
+          [data]="topBooksData()"
+          [type]="'bar'"
+          [options]="horizontalChartOptions">
+        </canvas>
+      </div>
+    } @else {
+      <div class="empty-state">
+        <span class="material-icons-outlined">analytics</span>
+        <p>No hay ventas en este periodo</p>
+        <button mat-raised-button class="btn-generate" (click)="clearFilters()">
+          <mat-icon>refresh</mat-icon> Ver ultimo año
+        </button>
+      </div>
+    }
+  } @else {
+    <!-- Modo IA -->
+    <div class="ia-section">
+      <p class="ia-hint">Pregunta sobre tus ventas, libros mas vendidos o cualquier dato de tu libreria.</p>
+
+      <form [formGroup]="aiForm">
+        <div class="ia-input-row">
+          <mat-form-field appearance="outline" class="ia-input">
+            <mat-label>Escribe tu consulta</mat-label>
+            <input matInput formControlName="query"
+                   (keyup.enter)="askAI()" placeholder="Ej: ¿Cuantas ventas tuve en marzo?">
+          </mat-form-field>
+          <button mat-raised-button class="btn-generate" (click)="askAI()" [disabled]="aiLoading() || !aiForm.get('query')?.value?.trim()">
+            @if (aiLoading()) {
+              <mat-spinner diameter="20"></mat-spinner>
+            } @else {
+              <mat-icon>send</mat-icon>
+            }
+            Consultar
+          </button>
+        </div>
+      </form>
+
+      @if (aiResponse()) {
+        <div class="ia-response">
+          <div class="ia-response-header">
+            <span class="material-icons-outlined">smart_toy</span>
+            <strong>Respuesta</strong>
+          </div>
+          <p class="ia-response-text">{{ aiResponse() }}</p>
+        </div>
+
+        @if (aiChartData().length > 0) {
+          <div class="chart-card">
+            <h3>Ventas por periodo</h3>
+            <canvas baseChart
+              [data]="aiChartDataFormatted()"
+              [type]="'bar'"
+              [options]="chartOptions">
+            </canvas>
+          </div>
+        }
+      }
+    </div>
+  }
+</div>

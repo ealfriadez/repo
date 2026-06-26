@@ -1,0 +1,10 @@
+[build]
+  base    = "frontend"
+  command = "npm ci && npx ng build --configuration production"
+  publish = "dist/frontend/browser"
+
+# Redirige todas las rutas al index.html (necesario para Angular SPA)
+[[redirects]]
+  from   = "/*"
+  to     = "/index.html"
+  status = 200

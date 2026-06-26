@@ -1,0 +1,67 @@
+services:
+
+  postgres:
+    image: pgvector/pgvector:pg16
+    container_name: bookstore-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${DB_NAME:-bookstore_ai_db}
+      POSTGRES_USER: ${DB_USER:-postgres}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-adminadmin}
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-postgres}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: bookstore-pgadmin
+    restart: unless-stopped
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_EMAIL:-admin@bookstore.com}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_PASSWORD:-admin123}
+    ports:
+      - "5050:80"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
+
+  api:
+    build: ./api
+    container_name: bookstore-api
+    restart: unless-stopped
+    ports:
+      - "8084:8084"
+    env_file:
+      - .env                 # Spring Boot lee todas las variables desde aquí
+    environment:
+      #DB_HOST: postgres      # override: dentro de docker el host es el nombre del servicio
+      DB_HOST: aws-1-us-west-2.pooler.supabase.com      # override: dentro de docker el host es el nombre del servicio para SUPABASE
+      DB_PORT: 5432          # override: puerto interno de la red docker
+      SPRING_PROFILES_ACTIVE: prod   # activa application-prod.yaml
+    depends_on:
+      postgres:
+        condition: service_healthy
+    volumes:
+      - uploads:/app/uploads
+
+  frontend:
+    build: ./frontend
+    container_name: bookstore-frontend
+    restart: unless-stopped
+    ports:
+      - "4200:80"
+    depends_on:
+      - api
+
+volumes:
+  postgres_data:
+  pgadmin_data:
+  uploads:

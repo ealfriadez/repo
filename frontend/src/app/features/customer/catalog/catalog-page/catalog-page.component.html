@@ -1,0 +1,98 @@
+<div class="catalog-container">
+  <!-- Barra de busqueda -->
+  <div class="filters-section">
+    <div class="search-bar">
+      <mat-form-field appearance="outline" class="search-field">
+        <mat-label>Buscar por titulo o autor</mat-label>
+        <form [formGroup]="searchForm">
+          <input matInput formControlName="search" (keyup.enter)="search()"
+                 placeholder="Ej: Cien anos de soledad">
+        </form>
+        <button mat-icon-button matSuffix (click)="search()">
+          <mat-icon>search</mat-icon>
+        </button>
+      </mat-form-field>
+    </div>
+
+    <!-- Filtros de genero -->
+    <div class="genre-chips">
+      @for (genre of genres; track genre) {
+        <button class="genre-chip" [class.active]="selectedGenre() === genre" (click)="filterByGenre(genre)">
+          {{ genre }}
+        </button>
+      }
+      @if (selectedGenre()) {
+        <button class="genre-chip clear" (click)="clearGenre()">
+          <mat-icon>close</mat-icon> Limpiar
+        </button>
+      }
+    </div>
+  </div>
+
+  <!-- Loading -->
+  @if (loading()) {
+    <div class="loading-state">
+      <mat-spinner diameter="48"></mat-spinner>
+    </div>
+  } @else {
+    <!-- Grid de libros -->
+    <div class="books-grid">
+      @for (book of books(); track book.id) {
+        <mat-card class="book-card" [class.out-of-stock]="book.stock <= 0" [routerLink]="['/catalog', book.slug]" style="cursor: pointer;">
+          @if (book.imageUrl) {
+            <img [src]="apiUrl + book.imageUrl" [alt]="book.title"
+                 style="width: 100%; height: 200px; object-fit: cover; border-radius: 4px 4px 0 0;">
+          } @else {
+            <div style="width: 100%; height: 200px; background: #e0e0e0; display: flex; align-items: center; justify-content: center; border-radius: 4px 4px 0 0;">
+              <mat-icon style="font-size: 48px; width: 48px; height: 48px; color: #9e9e9e;">menu_book</mat-icon>
+            </div>
+          }
+          <div class="book-genre-badge">{{ book.genre }}</div>
+          <mat-card-content>
+            <h3 class="book-title">{{ book.title }}</h3>
+            <p class="book-author">
+              <mat-icon>person</mat-icon> {{ book.authorFullName }}
+            </p>
+            @if (book.description) {
+              <p class="book-description">
+                {{ book.description.length > 100 ? book.description.substring(0, 100) + '...' : book.description }}
+              </p>
+            }
+            <div class="book-footer">
+              <div class="book-price">S/. {{ book.price }}</div>
+              <div class="book-stock" [class.low-stock]="book.stock > 0 && book.stock <= 3">
+                @if (book.stock > 0) {
+                  <mat-icon>inventory</mat-icon> {{ book.stock }} disponibles
+                } @else {
+                  <mat-icon>block</mat-icon> Agotado
+                }
+              </div>
+            </div>
+          </mat-card-content>
+          <mat-card-actions>
+            <button mat-raised-button class="btn-detail" [routerLink]="['/catalog', book.slug]">
+              <mat-icon>visibility</mat-icon> Ver detalle
+            </button>
+          </mat-card-actions>
+        </mat-card>
+      }
+    </div>
+
+    @if (books().length === 0) {
+      <div class="empty-state">
+        <mat-icon>search_off</mat-icon>
+        <p>No se encontraron libros con esos filtros.</p>
+        <button mat-button color="primary" (click)="clearGenre()">Ver todos</button>
+      </div>
+    }
+
+    <!-- Paginacion -->
+    <mat-paginator
+      [length]="totalElements()"
+      [pageSize]="12"
+      [pageIndex]="page()"
+      (page)="onPage($event)"
+      showFirstLastButtons>
+    </mat-paginator>
+  }
+</div>

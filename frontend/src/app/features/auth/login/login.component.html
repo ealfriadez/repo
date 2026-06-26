@@ -1,0 +1,73 @@
+<div class="auth-container">
+  <div class="auth-branding">
+    <div class="branding-content">
+      <div class="branding-logo">
+        <span class="material-icons-outlined">auto_stories</span>
+        <span>Bookstore AI</span>
+      </div>
+
+      <div class="branding-illustration">
+        <span class="material-icons-outlined illustration-icon">menu_book</span>
+      </div>
+
+      <h1>Bienvenido a Bookstore AI</h1>
+
+      <div class="branding-features">
+        <div class="feature-item">
+          <div class="feature-icon">
+            <span class="material-icons-outlined">groups</span>
+          </div>
+          <p>Plataforma para lectores y librerias</p>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon">
+            <span class="material-icons-outlined">psychology</span>
+          </div>
+          <p>Gestion inteligente con IA</p>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon">
+            <span class="material-icons-outlined">shopping_cart</span>
+          </div>
+          <p>Compra y vende libros online</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="auth-form-panel">
+    <div class="auth-form-content">
+      <h2>Iniciar sesion</h2>
+      <p class="auth-subtitle">Ingresa con tu email</p>
+
+      <form [formGroup]="loginForm" (ngSubmit)="login()">
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>E-mail</mat-label>
+          <input matInput type="email" formControlName="email">
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Contrasena</mat-label>
+          <input matInput [type]="hidePassword() ? 'password' : 'text'"
+                 formControlName="password">
+          <button mat-icon-button matSuffix type="button" (click)="hidePassword.set(!hidePassword())">
+            <mat-icon>{{ hidePassword() ? 'visibility_off' : 'visibility' }}</mat-icon>
+          </button>
+        </mat-form-field>
+
+        <button mat-raised-button class="btn-primary-full" type="submit"
+                [disabled]="loading() || loginForm.invalid">
+          @if (loading()) {
+            Ingresando...
+          } @else {
+            Iniciar sesion
+          }
+        </button>
+      </form>
+
+      <p class="auth-footer-text">
+        No tienes cuenta? <a routerLink="/register">Registrate</a>
+      </p>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,28 @@
+<div class="page-container">
+  <h2>Ingestion de Datos</h2>
+
+  <div class="cards-grid">
+    <mat-card>
+      <mat-card-header>
+        <mat-icon mat-card-avatar>menu_book</mat-icon>
+        <mat-card-title>Indexar Libros</mat-card-title>
+        <mat-card-subtitle>Enviar todos los libros al vector store</mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content>
+        <p>Indexa todos los libros de la base de datos en el sistema de busqueda vectorial para que el chat de IA pueda encontrarlos por tematica y descripcion.</p>
+        <p><strong>Ejecuta esto una vez al iniciar el proyecto y cada vez que agregues libros nuevos.</strong></p>
+        @if (loading()) {
+          <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+        }
+        @if (result()) {
+          <p class="result-msg">{{ result() }}</p>
+        }
+      </mat-card-content>
+      <mat-card-actions>
+        <button mat-raised-button color="primary" (click)="ingestBooks()" [disabled]="loading()">
+          <mat-icon>cloud_upload</mat-icon> Indexar Libros
+        </button>
+      </mat-card-actions>
+    </mat-card>
+  </div>
+</div>

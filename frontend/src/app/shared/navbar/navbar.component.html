@@ -1,0 +1,74 @@
+<nav class="navbar">
+  <div class="nav-container">
+    <a routerLink="/" class="nav-logo">
+      <span class="material-icons-outlined logo-icon">auto_stories</span>
+      <span class="logo-text">Bookstore AI</span>
+    </a>
+
+    <button class="hamburger" (click)="toggleMenu()">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+
+    <div class="nav-links" [class.active]="menuOpen()">
+      <ul class="nav-menu">
+        <li><a routerLink="/catalog" routerLinkActive="active">Catalogo</a></li>
+
+        @if (auth.isLoggedIn() && auth.isCustomer()) {
+          <li><a routerLink="/customer/chat" routerLinkActive="active">Chat IA</a></li>
+          <li><a routerLink="/customer/my-purchases" routerLinkActive="active">Mis Compras</a></li>
+          <li><a routerLink="/customer/my-books" routerLinkActive="active">Mis Libros</a></li>
+        }
+      </ul>
+
+      <div class="nav-actions-mobile">
+        @if (auth.isLoggedIn()) {
+          @if (auth.isCustomer()) {
+            <a routerLink="/customer/cart" class="nav-cta-secondary">
+              <span class="material-icons-outlined">shopping_cart</span> Carrito
+            </a>
+          }
+          <a routerLink="/customer/profile" class="nav-cta-secondary">
+            <span class="material-icons-outlined">person</span> Mi Perfil
+          </a>
+          <button class="nav-cta" (click)="auth.logout()">Cerrar Sesion</button>
+        } @else {
+          <a routerLink="/login" class="nav-cta-secondary">Iniciar Sesion</a>
+          <a routerLink="/register" class="nav-cta">Registrarse</a>
+        }
+      </div>
+    </div>
+
+    <div class="nav-actions">
+      @if (auth.isLoggedIn()) {
+        @if (auth.isCustomer()) {
+          <a routerLink="/customer/cart" class="cart-btn" [matBadge]="cartService.itemCount()" matBadgeColor="warn" [matBadgeHidden]="cartService.itemCount() === 0">
+            <span class="material-icons-outlined">shopping_cart</span>
+          </a>
+        }
+
+        <button class="nav-link user-btn" [matMenuTriggerFor]="userMenu">
+          <span class="material-icons-outlined">account_circle</span>
+          <span class="user-email">{{ auth.email() }}</span>
+          <span class="material-icons-outlined arrow">arrow_drop_down</span>
+        </button>
+        <mat-menu #userMenu="matMenu">
+          <button mat-menu-item disabled>
+            <mat-icon>badge</mat-icon>
+            Cliente
+          </button>
+          <a mat-menu-item routerLink="/customer/profile">
+            <mat-icon>person</mat-icon> Mi Perfil
+          </a>
+          <button mat-menu-item (click)="auth.logout()">
+            <mat-icon>logout</mat-icon> Cerrar Sesion
+          </button>
+        </mat-menu>
+      } @else {
+        <a routerLink="/login" class="nav-cta-secondary">Iniciar Sesion</a>
+        <a routerLink="/register" class="nav-cta">Registrarse</a>
+      }
+    </div>
+  </div>
+</nav>

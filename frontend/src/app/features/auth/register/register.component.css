@@ -1,0 +1,30 @@
+/* Registro — estilos específicos del componente */
+/* Diseño de autenticación, form-row, btn-submit, auth-footer-text están en styles.css */
+
+:host {
+  display: block;
+  height: 100vh;
+}
+
+/* Específico de registro: formulario más ancho + campos de medio ancho */
+.auth-form-content {
+  max-width: 440px;
+}
+
+.auth-form-content h2 {
+  margin-bottom: 32px;
+}
+
+.half-width {
+  width: 48%;
+}
+
+.form-row {
+  gap: 4%;
+}
+
+@media (max-width: 768px) {
+  .half-width {
+    width: 100%;
+  }
+}

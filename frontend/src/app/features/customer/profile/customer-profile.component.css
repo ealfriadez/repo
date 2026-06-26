@@ -1,0 +1,31 @@
+/* Perfil del Cliente — estilos específicos del componente */
+/* btn-save, error-hint están en styles.css */
+
+.page-container {
+  max-width: 900px;
+}
+
+.profile-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+
+.profile-card {
+  border-radius: var(--radius, 12px) !important;
+  box-shadow: var(--shadow-sm) !important;
+  padding: 8px !important;
+}
+
+h3 {
+  font-family: 'Poppins', sans-serif;
+  font-size: 1.1rem;
+  color: var(--primary, #1a1a2e);
+  margin-bottom: 20px;
+}
+
+@media (max-width: 768px) {
+  .profile-grid {
+    grid-template-columns: 1fr;
+  }
+}

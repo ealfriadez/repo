@@ -1,0 +1,30 @@
+/* Formulario de Reseña — estilos específicos del componente */
+/* form-actions están en styles.css */
+
+.form-container {
+  max-width: 600px;
+  margin: 24px auto;
+  padding: 0 16px;
+}
+
+.star-icon {
+  color: #ffc107;
+}
+
+.star-empty {
+  color: #ccc;
+}
+
+.book-option {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.3;
+}
+
+.book-option small { color: #888; }
+
+.rating-text {
+  margin-left: 8px;
+  color: #666;
+  font-size: 13px;
+}

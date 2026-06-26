@@ -1,0 +1,169 @@
+/* Formulario de Libro — estilos específicos del componente */
+/* upload-placeholder, upload-text, upload-hint están en styles.css */
+
+.form-layout {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr;
+  gap: 24px;
+  align-items: start;
+}
+
+.form-card {
+  border-radius: var(--radius, 12px) !important;
+  box-shadow: var(--shadow-sm) !important;
+  padding: 8px !important;
+  margin-bottom: 16px;
+}
+
+.form-section {
+  margin-bottom: 24px;
+}
+
+.form-section h3,
+.preview-column h3 {
+  font-family: 'Poppins', sans-serif;
+  font-size: 1rem;
+  color: var(--primary, #1a1a2e);
+  margin-bottom: 16px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--gray-200, #e0e0e0);
+}
+
+.row-2, .row-3 {
+  display: flex;
+  gap: 16px;
+}
+
+.row-2 mat-form-field,
+.row-3 mat-form-field {
+  flex: 1;
+}
+
+/* Carga de imagen */
+.image-upload-area {
+  border: 2px dashed var(--gray-300, #ccc);
+  border-radius: var(--radius, 12px);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  min-height: 280px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--gray-100, #f0f0f0);
+}
+
+.image-upload-area:hover {
+  border-color: var(--secondary, #e2b04a);
+  background: rgba(226, 176, 74, 0.05);
+}
+
+.image-preview {
+  width: 100%;
+  height: 100%;
+  min-height: 280px;
+  object-fit: cover;
+}
+
+/* Carga de archivo */
+.file-upload-area {
+  border: 2px dashed var(--gray-300, #ccc);
+  border-radius: var(--radius, 12px);
+  padding: 24px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100px;
+  background: var(--gray-100, #f0f0f0);
+}
+
+.file-upload-area:hover {
+  border-color: var(--secondary, #e2b04a);
+  background: rgba(226, 176, 74, 0.05);
+}
+
+/* Información del archivo */
+.file-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.file-icon {
+  font-size: 36px !important;
+  color: var(--secondary, #e2b04a);
+}
+
+.file-name {
+  font-weight: 600;
+  font-size: 0.85rem;
+  color: var(--primary, #1a1a2e);
+  word-break: break-all;
+  text-align: center;
+}
+
+.file-size {
+  font-size: 0.75rem;
+  color: var(--gray-500, #888);
+}
+
+/* Botón de eliminar */
+.remove-btn {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(0, 0, 0, 0.6);
+  color: white;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s;
+  z-index: 2;
+}
+
+.remove-btn:hover {
+  background: rgba(198, 40, 40, 0.9);
+}
+
+.remove-btn .material-icons-outlined {
+  font-size: 18px;
+}
+
+/* Acciones */
+.form-actions {
+  padding-top: 16px;
+  border-top: 1px solid var(--gray-200, #e0e0e0);
+}
+
+.btn-save {
+  background-color: #e2b04a !important;
+  color: #1a1a2e !important;
+  border-radius: 50px !important;
+  font-weight: 600 !important;
+  padding: 0 32px !important;
+  --mat-button-filled-container-color: #e2b04a !important;
+  --mat-button-filled-label-text-color: #1a1a2e !important;
+}
+
+/* Responsivo */
+@media (max-width: 768px) {
+  .form-layout {
+    grid-template-columns: 1fr;
+  }
+  .row-2, .row-3 {
+    flex-direction: column;
+  }
+  .preview-column {
+    order: -1;
+  }
+}

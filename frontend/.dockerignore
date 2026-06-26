@@ -1,0 +1,16 @@
+# Dependencias (se reinstalan en el build)
+node_modules/
+
+# Build anterior (se regenera)
+dist/
+
+# Cache de Angular
+.angular/
+
+# Archivos de IDE
+.vscode/
+.idea/
+
+# Archivos locales
+.env
+*.log

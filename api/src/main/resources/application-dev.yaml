@@ -1,0 +1,12 @@
+# Perfil de desarrollo — logs detallados para depurar
+spring:
+  jpa:
+    show-sql: true             # muestra las queries SQL en consola
+    properties:
+      hibernate:
+        format_sql: true       # las muestra con formato legible
+
+logging:
+  level:
+    root: INFO
+    com.example.bookstoreai: DEBUG   # logs detallados de tu código

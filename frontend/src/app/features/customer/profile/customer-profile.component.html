@@ -1,0 +1,54 @@
+<div class="page-container">
+  <div class="profile-grid">
+    <mat-card class="profile-card">
+      <mat-card-content>
+        <h3>Datos personales</h3>
+        <form [formGroup]="profileForm" (ngSubmit)="updateProfile()">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Nombre</mat-label>
+            <input matInput formControlName="firstName">
+          </mat-form-field>
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Apellido</mat-label>
+            <input matInput formControlName="lastName">
+          </mat-form-field>
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Telefono</mat-label>
+            <input matInput formControlName="phone">
+          </mat-form-field>
+          <button mat-raised-button class="btn-primary-full" type="submit" [disabled]="profileForm.invalid || savingProfile()">
+            @if (savingProfile()) { Guardando... } @else { Guardar cambios }
+          </button>
+        </form>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card class="profile-card">
+      <mat-card-content>
+        <h3>Cambiar contrasena</h3>
+        <form [formGroup]="passwordForm" (ngSubmit)="changePassword()">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Contrasena actual</mat-label>
+            <input matInput formControlName="currentPassword" [type]="hideCurrentPw() ? 'password' : 'text'">
+            <button mat-icon-button matSuffix type="button" (click)="hideCurrentPw.set(!hideCurrentPw())">
+              <mat-icon>{{ hideCurrentPw() ? 'visibility_off' : 'visibility' }}</mat-icon>
+            </button>
+          </mat-form-field>
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Nueva contrasena</mat-label>
+            <input matInput formControlName="newPassword" [type]="hideNewPw() ? 'password' : 'text'">
+            <button mat-icon-button matSuffix type="button" (click)="hideNewPw.set(!hideNewPw())">
+              <mat-icon>{{ hideNewPw() ? 'visibility_off' : 'visibility' }}</mat-icon>
+            </button>
+            @if (passwordForm.get('newPassword')?.hasError('pattern')) {
+              <mat-hint class="field-error">Minimo 8 caracteres, mayuscula, minuscula, numero y caracter especial</mat-hint>
+            }
+          </mat-form-field>
+          <button mat-raised-button class="btn-primary-full" type="submit" [disabled]="passwordForm.invalid || savingPassword()">
+            @if (savingPassword()) { Actualizando... } @else { Cambiar contrasena }
+          </button>
+        </form>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

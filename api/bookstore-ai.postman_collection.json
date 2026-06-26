@@ -1,0 +1,701 @@
+{
+  "info": {
+    "name": "bookstore-ai (SaaS)",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "base_url", "value": "http://localhost:8084" },
+    { "key": "token", "value": "" },
+    { "key": "admin_token", "value": "" },
+    { "key": "owner_token", "value": "" },
+    { "key": "book_id", "value": "1" },
+    { "key": "author_id", "value": "1" },
+    { "key": "review_id", "value": "1" },
+    { "key": "sale_id", "value": "1" },
+    { "key": "store_id", "value": "1" },
+    { "key": "notification_id", "value": "1" }
+  ],
+  "item": [
+    {
+      "name": "00 - Auth",
+      "item": [
+        {
+          "name": "login admin",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var json = pm.response.json();",
+                  "if (json.token) {",
+                  "    pm.collectionVariables.set('admin_token', json.token);",
+                  "    pm.collectionVariables.set('token', json.token);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"email\": \"admin@bookstore.com\",\n  \"password\": \"admin123\"\n}" },
+            "url": "{{base_url}}/api/auth/login"
+          }
+        },
+        {
+          "name": "login customer (carlos)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var json = pm.response.json();",
+                  "if (json.token) {",
+                  "    pm.collectionVariables.set('token', json.token);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"email\": \"carlos@email.com\",\n  \"password\": \"admin123\"\n}" },
+            "url": "{{base_url}}/api/auth/login"
+          }
+        },
+        {
+          "name": "login bookstore owner (sur)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var json = pm.response.json();",
+                  "if (json.token) {",
+                  "    pm.collectionVariables.set('owner_token', json.token);",
+                  "    pm.collectionVariables.set('token', json.token);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"email\": \"libreria.sur@email.com\",\n  \"password\": \"admin123\"\n}" },
+            "url": "{{base_url}}/api/auth/login"
+          }
+        },
+        {
+          "name": "register nuevo customer",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var json = pm.response.json();",
+                  "if (json.token) {",
+                  "    pm.collectionVariables.set('token', json.token);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"email\": \"nuevo@email.com\",\n  \"password\": \"password123\",\n  \"firstName\": \"Juan\",\n  \"lastName\": \"Perez\",\n  \"dni\": \"99887766\",\n  \"phone\": \"999888777\"\n}" },
+            "url": "{{base_url}}/api/auth/register"
+          }
+        },
+        {
+          "name": "google login",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"credential\": \"GOOGLE_ID_TOKEN_HERE\"\n}" },
+            "url": "{{base_url}}/api/auth/google"
+          }
+        }
+      ]
+    },
+    {
+      "name": "01 - Admin",
+      "item": [
+        {
+          "name": "crear usuario (admin)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{admin_token}}" }
+            ],
+            "body": { "mode": "raw", "raw": "{\n  \"email\": \"newuser@email.com\",\n  \"password\": \"Password@123\",\n  \"roleName\": \"CUSTOMER\",\n  \"firstName\": \"Pedro\",\n  \"lastName\": \"Gomez\"\n}" },
+            "url": "{{base_url}}/api/admin/users"
+          }
+        }
+      ]
+    },
+    {
+      "name": "02 - Users",
+      "item": [
+        {
+          "name": "get profile",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": "{{base_url}}/api/users/profile"
+          }
+        },
+        {
+          "name": "update profile",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": { "mode": "raw", "raw": "{\n  \"firstName\": \"Carlos\",\n  \"lastName\": \"Mendoza Diaz\",\n  \"phone\": \"987654000\"\n}" },
+            "url": "{{base_url}}/api/users/profile"
+          }
+        },
+        {
+          "name": "change password",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": { "mode": "raw", "raw": "{\n  \"currentPassword\": \"admin123\",\n  \"newPassword\": \"NewPassword@123\"\n}" },
+            "url": "{{base_url}}/api/users/profile/password"
+          }
+        }
+      ]
+    },
+    {
+      "name": "03 - Catalog (publico)",
+      "item": [
+        {
+          "name": "buscar libros (filtros combinados)",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/catalog/books?title=&genre=&author=&minPrice=&maxPrice=&storeId=&page=0&size=12",
+              "host": ["{{base_url}}"],
+              "path": ["api", "catalog", "books"],
+              "query": [
+                { "key": "title", "value": "" },
+                { "key": "genre", "value": "" },
+                { "key": "author", "value": "" },
+                { "key": "minPrice", "value": "" },
+                { "key": "maxPrice", "value": "" },
+                { "key": "storeId", "value": "" },
+                { "key": "page", "value": "0" },
+                { "key": "size", "value": "12" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "buscar autores",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/catalog/authors?name=&nationality=&page=0&size=12",
+              "host": ["{{base_url}}"],
+              "path": ["api", "catalog", "authors"],
+              "query": [
+                { "key": "name", "value": "" },
+                { "key": "nationality", "value": "" },
+                { "key": "page", "value": "0" },
+                { "key": "size", "value": "12" }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "04 - Books",
+      "item": [
+        {
+          "name": "listar (publico)",
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/api/books?page=0&size=10&sort=title,asc"
+          }
+        },
+        {
+          "name": "obtener por id (publico)",
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/api/books/{{book_id}}"
+          }
+        },
+        {
+          "name": "obtener por slug (publico)",
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/api/books/slug/cien-anos-de-soledad"
+          }
+        },
+        {
+          "name": "crear libro (multipart: book + image)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{owner_token}}" }
+            ],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "book",
+                  "value": "{\n  \"title\": \"Pedro Paramo\",\n  \"genre\": \"Realismo magico\",\n  \"price\": 39.00,\n  \"stock\": 10,\n  \"minStock\": 5,\n  \"authorId\": 1,\n  \"description\": \"Un hombre viaja a Comala buscando a su padre.\",\n  \"storeId\": 1\n}",
+                  "type": "text",
+                  "contentType": "application/json"
+                },
+                {
+                  "key": "image",
+                  "type": "file",
+                  "src": ""
+                }
+              ]
+            },
+            "url": "{{base_url}}/api/books"
+          }
+        },
+        {
+          "name": "actualizar libro (multipart: book + image)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{owner_token}}" }
+            ],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "book",
+                  "value": "{\n  \"title\": \"Pedro Paramo - Edicion Especial\",\n  \"genre\": \"Realismo magico\",\n  \"price\": 45.00,\n  \"stock\": 15,\n  \"minStock\": 5,\n  \"authorId\": 1,\n  \"description\": \"Edicion especial con prologo inedito.\",\n  \"storeId\": 1\n}",
+                  "type": "text",
+                  "contentType": "application/json"
+                },
+                {
+                  "key": "image",
+                  "type": "file",
+                  "src": ""
+                }
+              ]
+            },
+            "url": "{{base_url}}/api/books/{{book_id}}"
+          }
+        },
+        {
+          "name": "eliminar libro",
+          "request": {
+            "method": "DELETE",
+            "header": [{ "key": "Authorization", "value": "Bearer {{owner_token}}" }],
+            "url": "{{base_url}}/api/books/{{book_id}}"
+          }
+        },
+        {
+          "name": "carga masiva desde Excel",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{owner_token}}" }
+            ],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                { "key": "file", "type": "file", "src": "" },
+                { "key": "storeId", "value": "1", "type": "text" }
+              ]
+            },
+            "url": "{{base_url}}/api/books/bulk-upload"
+          }
+        }
+      ]
+    },
+    {
+      "name": "05 - Authors",
+      "item": [
+        {
+          "name": "listar (publico)",
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/api/authors?page=0&size=10&sort=lastName,asc"
+          }
+        },
+        {
+          "name": "obtener por id (publico)",
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/api/authors/{{author_id}}"
+          }
+        },
+        {
+          "name": "crear autor (owner)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{owner_token}}" }
+            ],
+            "body": { "mode": "raw", "raw": "{\n  \"firstName\": \"Carlos\",\n  \"lastName\": \"Fuentes\",\n  \"nationality\": \"Mexicana\",\n  \"storeId\": 1\n}" },
+            "url": "{{base_url}}/api/authors"
+          }
+        },
+        {
+          "name": "actualizar autor (owner)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{owner_token}}" }
+            ],
+            "body": { "mode": "raw", "raw": "{\n  \"firstName\": \"Carlos\",\n  \"lastName\": \"Fuentes Macias\",\n  \"nationality\": \"Mexicana\",\n  \"storeId\": 1\n}" },
+            "url": "{{base_url}}/api/authors/{{author_id}}"
+          }
+        },
+        {
+          "name": "eliminar autor (owner/admin)",
+          "request": {
+            "method": "DELETE",
+            "header": [{ "key": "Authorization", "value": "Bearer {{owner_token}}" }],
+            "url": "{{base_url}}/api/authors/{{author_id}}"
+          }
+        }
+      ]
+    },
+    {
+      "name": "06 - Stores",
+      "item": [
+        {
+          "name": "listar (publico)",
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/api/stores"
+          }
+        },
+        {
+          "name": "obtener por id (publico)",
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/api/stores/{{store_id}}"
+          }
+        },
+        {
+          "name": "mis librerias (owner)",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{owner_token}}" }],
+            "url": "{{base_url}}/api/stores/my-stores"
+          }
+        },
+        {
+          "name": "crear libreria (owner)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{owner_token}}" }
+            ],
+            "body": { "mode": "raw", "raw": "{\n  \"name\": \"Mi Nueva Libreria\",\n  \"description\": \"Especialistas en novela grafica\",\n  \"address\": \"Calle Libros 456\",\n  \"phone\": \"01-1234567\",\n  \"email\": \"info@minuevalibreria.com\"\n}" },
+            "url": "{{base_url}}/api/stores"
+          }
+        },
+        {
+          "name": "actualizar libreria (owner/admin)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{owner_token}}" }
+            ],
+            "body": { "mode": "raw", "raw": "{\n  \"name\": \"Libreria del Sur - Actualizada\",\n  \"description\": \"Ahora con seccion de manga\",\n  \"address\": \"Av. Larco 345, Miraflores, Lima\",\n  \"phone\": \"01-4567890\",\n  \"email\": \"libreria.sur@email.com\"\n}" },
+            "url": "{{base_url}}/api/stores/{{store_id}}"
+          }
+        },
+        {
+          "name": "desactivar libreria (admin)",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Authorization", "value": "Bearer {{admin_token}}" }],
+            "url": "{{base_url}}/api/stores/{{store_id}}/deactivate"
+          }
+        },
+        {
+          "name": "activar libreria (admin)",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Authorization", "value": "Bearer {{admin_token}}" }],
+            "url": "{{base_url}}/api/stores/{{store_id}}/activate"
+          }
+        }
+      ]
+    },
+    {
+      "name": "07 - Sales",
+      "item": [
+        {
+          "name": "crear venta (PayPal)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var json = pm.response.json();",
+                  "if (json.paypalOrderId) {",
+                  "    pm.collectionVariables.set('sale_id', json.saleId || '');",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": { "mode": "raw", "raw": "{\n  \"items\": [\n    { \"bookId\": 1, \"quantity\": 1 },\n    { \"bookId\": 9, \"quantity\": 1 }\n  ]\n}" },
+            "url": "{{base_url}}/api/sales"
+          }
+        },
+        {
+          "name": "confirmar pago PayPal",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": {
+              "raw": "{{base_url}}/api/sales/confirm?token=PAYPAL_TOKEN_HERE",
+              "host": ["{{base_url}}"],
+              "path": ["api", "sales", "confirm"],
+              "query": [{ "key": "token", "value": "PAYPAL_TOKEN_HERE" }]
+            }
+          }
+        },
+        {
+          "name": "cancelar pago PayPal",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": {
+              "raw": "{{base_url}}/api/sales/cancel?token=PAYPAL_TOKEN_HERE",
+              "host": ["{{base_url}}"],
+              "path": ["api", "sales", "cancel"],
+              "query": [{ "key": "token", "value": "PAYPAL_TOKEN_HERE" }]
+            }
+          }
+        },
+        {
+          "name": "listar ventas",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": "{{base_url}}/api/sales?page=0&size=10"
+          }
+        },
+        {
+          "name": "obtener venta por id",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": "{{base_url}}/api/sales/{{sale_id}}"
+          }
+        }
+      ]
+    },
+    {
+      "name": "08 - Reviews",
+      "item": [
+        {
+          "name": "obtener resena por id (publico)",
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/api/reviews/{{review_id}}"
+          }
+        },
+        {
+          "name": "listar resenas por libro (publico)",
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/api/reviews/book/{{book_id}}"
+          }
+        },
+        {
+          "name": "crear resena (customer)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": { "mode": "raw", "raw": "{\n  \"comment\": \"Excelente libro, lo recomiendo mucho.\",\n  \"rating\": 5,\n  \"bookId\": 1\n}" },
+            "url": "{{base_url}}/api/reviews"
+          }
+        },
+        {
+          "name": "actualizar resena (customer/admin)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": { "mode": "raw", "raw": "{\n  \"comment\": \"Actualizo mi resena: sigue siendo excelente.\",\n  \"rating\": 5,\n  \"bookId\": 1\n}" },
+            "url": "{{base_url}}/api/reviews/{{review_id}}"
+          }
+        },
+        {
+          "name": "eliminar resena (customer/admin)",
+          "request": {
+            "method": "DELETE",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": "{{base_url}}/api/reviews/{{review_id}}"
+          }
+        }
+      ]
+    },
+    {
+      "name": "09 - AI",
+      "item": [
+        {
+          "name": "chat IA (consulta por genero)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": { "mode": "raw", "raw": "{\n  \"message\": \"Que libros de terror tenemos?\"\n}" },
+            "url": "{{base_url}}/api/ai/chat"
+          }
+        },
+        {
+          "name": "chat IA (busqueda semantica RAG)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": { "mode": "raw", "raw": "{\n  \"message\": \"Quiero algo sobre familias y destino, algo magico\"\n}" },
+            "url": "{{base_url}}/api/ai/chat"
+          }
+        },
+        {
+          "name": "chat IA (compra via chat)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": { "mode": "raw", "raw": "{\n  \"message\": \"Quiero comprar 2 copias de It y 1 de Cien anos de soledad\"\n}" },
+            "url": "{{base_url}}/api/ai/chat"
+          }
+        },
+        {
+          "name": "reporte IA (admin)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{admin_token}}" }
+            ],
+            "body": { "mode": "raw", "raw": "{\n  \"message\": \"Reporte completo de libros y autores por libreria\"\n}" },
+            "url": "{{base_url}}/api/ai/report"
+          }
+        }
+      ]
+    },
+    {
+      "name": "10 - Ingestion (admin)",
+      "item": [
+        {
+          "name": "indexar libros",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Authorization", "value": "Bearer {{admin_token}}" }],
+            "url": "{{base_url}}/api/ingestion/books"
+          }
+        },
+        {
+          "name": "indexar resenias",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Authorization", "value": "Bearer {{admin_token}}" }],
+            "url": "{{base_url}}/api/ingestion/reviews"
+          }
+        },
+        {
+          "name": "indexar pdf",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Authorization", "value": "Bearer {{admin_token}}" }],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                { "key": "file", "type": "file", "src": "" },
+                { "key": "bookTitle", "value": "Cien anos de soledad", "type": "text" }
+              ]
+            },
+            "url": "{{base_url}}/api/ingestion/pdf"
+          }
+        }
+      ]
+    },
+    {
+      "name": "11 - Notifications",
+      "item": [
+        {
+          "name": "listar no leidas",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": "{{base_url}}/api/notifications"
+          }
+        },
+        {
+          "name": "marcar como leida",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": "{{base_url}}/api/notifications/{{notification_id}}/read"
+          }
+        },
+        {
+          "name": "contar no leidas",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": "{{base_url}}/api/notifications/count"
+          }
+        }
+      ]
+    },
+    {
+      "name": "12 - Reports (admin)",
+      "item": [
+        {
+          "name": "estadisticas por genero",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{admin_token}}" }],
+            "url": "{{base_url}}/api/reports/genre-stats"
+          }
+        }
+      ]
+    }
+  ]
+}

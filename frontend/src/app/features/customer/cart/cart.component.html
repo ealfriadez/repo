@@ -1,0 +1,106 @@
+<div class="cart-container">
+  @if (cartService.cartItems().length === 0) {
+    <mat-card class="empty-cart">
+      <mat-card-content>
+        <mat-icon class="empty-icon">remove_shopping_cart</mat-icon>
+        <h3>Tu carrito esta vacio</h3>
+        <p>Explora el catalogo y agrega libros.</p>
+        <a mat-raised-button color="primary" routerLink="/catalog">
+          <mat-icon>storefront</mat-icon> Ir al catalogo
+        </a>
+      </mat-card-content>
+    </mat-card>
+  } @else {
+    <div class="cart-layout">
+      <!-- Items -->
+      <mat-card class="items-card">
+        <mat-card-content>
+          <table mat-table [dataSource]="cartService.cartItems()" class="full-width">
+            <ng-container matColumnDef="book">
+              <th mat-header-cell *matHeaderCellDef>Libro</th>
+              <td mat-cell *matCellDef="let item">
+                <div class="item-info">
+                  <span class="item-title">{{ item.book.title }}</span>
+                  <span class="item-author">{{ item.book.authorFullName }}</span>
+                </div>
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="price">
+              <th mat-header-cell *matHeaderCellDef>Precio</th>
+              <td mat-cell *matCellDef="let item">S/. {{ item.book.price }}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="quantity">
+              <th mat-header-cell *matHeaderCellDef>Cantidad</th>
+              <td mat-cell *matCellDef="let item">
+                <div class="qty-controls">
+                  <button mat-icon-button (click)="cartService.updateQuantity(item.book.id, item.quantity - 1)">
+                    <mat-icon>remove</mat-icon>
+                  </button>
+                  <span class="qty-value">{{ item.quantity }}</span>
+                  <button mat-icon-button (click)="cartService.updateQuantity(item.book.id, item.quantity + 1)"
+                          [disabled]="item.quantity >= item.book.stock">
+                    <mat-icon>add</mat-icon>
+                  </button>
+                </div>
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="subtotal">
+              <th mat-header-cell *matHeaderCellDef>Subtotal</th>
+              <td mat-cell *matCellDef="let item" class="subtotal">
+                S/. {{ (item.book.price * item.quantity).toFixed(2) }}
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="actions">
+              <th mat-header-cell *matHeaderCellDef></th>
+              <td mat-cell *matCellDef="let item">
+                <button mat-icon-button color="warn" (click)="cartService.remove(item.book.id)">
+                  <mat-icon>delete</mat-icon>
+                </button>
+              </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="columns"></tr>
+            <tr mat-row *matRowDef="let row; columns: columns;"></tr>
+          </table>
+        </mat-card-content>
+      </mat-card>
+
+      <!-- Resumen -->
+      <mat-card class="summary-card">
+        <mat-card-header>
+          <mat-card-title>Resumen de compra</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="summary-row">
+            <span>Items</span>
+            <span>{{ cartService.itemCount() }}</span>
+          </div>
+          <mat-divider></mat-divider>
+          <div class="summary-total">
+            <span>Total</span>
+            <span class="total-price">S/. {{ cartService.total().toFixed(2) }}</span>
+          </div>
+
+          <button mat-raised-button color="primary" class="checkout-btn"
+                  (click)="checkout()"
+                  [disabled]="saving()">
+            @if (saving()) {
+              <mat-spinner diameter="20"></mat-spinner>
+            } @else {
+              <mat-icon>point_of_sale</mat-icon>
+            }
+            Finalizar compra
+          </button>
+
+          <a mat-button routerLink="/catalog" class="continue-btn">
+            <mat-icon>arrow_back</mat-icon> Seguir comprando
+          </a>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  }
+</div>

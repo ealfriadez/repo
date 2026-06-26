@@ -1,0 +1,16 @@
+@if (isVisible()) {
+  <div class="breadcrumb-container">
+    <div class="breadcrumb-content">
+      <nav class="breadcrumb-nav">
+        @for (crumb of breadcrumbs(); track crumb.url; let last = $last) {
+          @if (!last) {
+            <a [routerLink]="crumb.url" class="breadcrumb-link">{{ crumb.label }}</a>
+            <span class="breadcrumb-separator material-icons-outlined">chevron_right</span>
+          } @else {
+            <span class="breadcrumb-current">{{ crumb.label }}</span>
+          }
+        }
+      </nav>
+    </div>
+  </div>
+}

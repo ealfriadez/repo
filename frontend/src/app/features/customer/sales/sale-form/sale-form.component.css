@@ -1,0 +1,43 @@
+/* Formulario de Venta — estilos específicos del componente */
+
+.form-container {
+  max-width: 1200px;
+}
+
+mat-card-title {
+  font-family: 'Poppins', sans-serif;
+  color: var(--primary);
+  font-weight: 600;
+}
+
+.add-item-row {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  margin-bottom: 16px;
+}
+
+.book-select {
+  flex: 2;
+}
+
+.quantity-field {
+  flex: 0 0 100px;
+}
+
+.total-row {
+  text-align: right;
+  padding: 16px;
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--secondary);
+  font-family: 'Poppins', sans-serif;
+}
+
+.form-actions button[color="primary"] {
+  background-color: var(--secondary) !important;
+  color: var(--primary) !important;
+  border-radius: var(--radius-sm) !important;
+  font-weight: 600;
+  font-family: 'Inter', sans-serif;
+}

@@ -1,0 +1,40 @@
+# Variables de entorno — NUNCA subir a git
+.env
+
+# Docker
+docker-compose.override.yml
+
+# Archivos subidos por usuarios
+api/uploads/
+
+# Claude Code
+.claude/
+GUIA.md
+
+# IntelliJ / IDE
+.idea/
+*.iml
+*.iws
+*.ipr
+
+# Maven
+api/target/
+api/**/*.class
+
+# Node
+frontend/node_modules/
+landing/node_modules/
+
+# Angular build y cache
+frontend/dist/
+frontend/.angular/
+
+# OS — Mac
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+# OS — Windows
+Thumbs.db
+Desktop.ini

@@ -1,0 +1,106 @@
+.my-books-container {
+  max-width: 800px;
+  margin: 2rem auto;
+  padding: 0 24px;
+}
+
+.search-bar {
+  margin-bottom: 24px;
+}
+
+.search-field {
+  width: 100%;
+}
+
+.books-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.book-item {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px 20px;
+  background: var(--white, #fff);
+  border: 1px solid var(--gray-200, #e0e0e0);
+  border-radius: var(--radius, 12px);
+  transition: all 0.3s ease;
+}
+
+.book-item:hover {
+  box-shadow: var(--shadow-sm);
+}
+
+.book-icon {
+  width: 48px;
+  height: 48px;
+  min-width: 48px;
+  border-radius: 50%;
+  background: rgba(226, 176, 74, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.book-icon .material-icons-outlined {
+  font-size: 24px;
+  color: var(--secondary, #e2b04a);
+}
+
+.book-info {
+  flex: 1;
+}
+
+.book-info h4 {
+  margin: 0;
+  font-family: 'Poppins', sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--primary, #1a1a2e);
+}
+
+.book-info p {
+  margin: 2px 0 0;
+  font-size: 0.85rem;
+  color: var(--gray-500, #888);
+}
+
+.btn-download {
+  background: var(--secondary, #e2b04a) !important;
+  color: var(--primary, #1a1a2e) !important;
+  border-radius: 8px !important;
+  font-weight: 600;
+}
+
+.no-file {
+  font-size: 0.85rem;
+  color: var(--gray-400, #aaa);
+  font-style: italic;
+}
+
+.loading-state, .empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 64px 0;
+  color: var(--gray-500, #888);
+}
+
+.empty-state .material-icons-outlined {
+  font-size: 64px;
+  color: var(--gray-300, #ccc);
+  margin-bottom: 16px;
+}
+
+@media (max-width: 768px) {
+  .book-item {
+    flex-direction: column;
+    text-align: center;
+  }
+  .btn-download {
+    width: 100%;
+  }
+}

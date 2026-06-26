@@ -1,0 +1,74 @@
+<div class="admin-shell" [class.collapsed]="sidebarCollapsed()">
+  <!-- Sidebar -->
+  <aside class="sidebar" [class.open]="sidebarOpen()">
+    <div class="sidebar-header">
+      <a [routerLink]="auth.getHomeRoute()" class="sidebar-logo">
+        <span class="material-icons-outlined logo-icon">auto_stories</span>
+        @if (!sidebarCollapsed()) {
+          <span class="logo-text">Bookstore AI</span>
+        }
+      </a>
+    </div>
+
+    <nav class="sidebar-nav">
+      @for (group of getGroups(); track group) {
+        @if (!sidebarCollapsed()) {
+          <div class="sidebar-group-label">{{ group }}</div>
+        } @else {
+          <div class="sidebar-divider"></div>
+        }
+        @for (item of getItemsByGroup(group); track item.route) {
+          <a [routerLink]="item.route" routerLinkActive="active" class="sidebar-link" (click)="closeSidebar()">
+            <span class="material-icons-outlined">{{ item.icon }}</span>
+            @if (!sidebarCollapsed()) {
+              <span class="link-text">{{ item.label }}</span>
+            }
+          </a>
+        }
+      }
+    </nav>
+  </aside>
+
+  <!-- Main area -->
+  <div class="main-area">
+    <!-- Topbar -->
+    <header class="topbar">
+      <button class="toggle-btn" (click)="toggleSidebar()">
+        <span class="material-icons-outlined">menu</span>
+      </button>
+
+      <div class="topbar-spacer"></div>
+
+      <div class="topbar-actions">
+        <button class="topbar-user" [matMenuTriggerFor]="userMenu">
+          <span class="material-icons-outlined">account_circle</span>
+          <span class="user-name">{{ auth.email() }}</span>
+          <span class="material-icons-outlined arrow">arrow_drop_down</span>
+        </button>
+        <mat-menu #userMenu="matMenu">
+          <button mat-menu-item disabled>
+            <mat-icon>badge</mat-icon>
+            Dueno de Libreria
+          </button>
+          <a mat-menu-item routerLink="/owner/change-password">
+            <mat-icon>lock</mat-icon> Cambiar contrasena
+          </a>
+          <button mat-menu-item (click)="auth.logout()">
+            <mat-icon>logout</mat-icon> Cerrar Sesion
+          </button>
+        </mat-menu>
+      </div>
+    </header>
+
+    <!-- Content -->
+    <div class="content-area">
+      <app-breadcrumb></app-breadcrumb>
+      <main class="admin-content">
+        <router-outlet></router-outlet>
+      </main>
+    </div>
+  </div>
+
+  <!-- Sidebar overlay for mobile -->
+  <div class="sidebar-overlay" [class.active]="sidebarOpen()" (click)="closeSidebar()"></div>
+</div>

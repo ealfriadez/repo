@@ -1,0 +1,76 @@
+<div class="page-container">
+  <mat-card class="upload-card">
+    <div class="upload-zone"
+         [class.drag-over]="isDragOver()"
+         (dragover)="onDragOver($event)"
+         (dragleave)="onDragLeave($event)"
+         (drop)="onDrop($event)"
+         (click)="fileInput.click()">
+
+      <input #fileInput type="file" accept=".xlsx,.xls" hidden (change)="onFileSelected($event)">
+
+      @if (!selectedFile()) {
+        <span class="material-icons-outlined upload-icon">cloud_upload</span>
+        <h3>Arrastra y suelta tu archivo Excel aquí</h3>
+        <p>o haz clic para seleccionar</p>
+        <span class="file-hint">Formatos aceptados: .xlsx, .xls</span>
+      } @else {
+        <span class="material-icons-outlined upload-icon selected">description</span>
+        <h3>{{ selectedFile()!.name }}</h3>
+        <p>{{ formatFileSize(selectedFile()!.size) }}</p>
+        <button mat-button color="warn" (click)="clearFile($event)">
+          <mat-icon>close</mat-icon> Quitar archivo
+        </button>
+      }
+    </div>
+
+    @if (selectedFile()) {
+      <div class="upload-actions">
+        <button mat-raised-button class="btn-upload" (click)="upload()" [disabled]="uploading()">
+          @if (uploading()) {
+            <mat-spinner diameter="20"></mat-spinner> Subiendo...
+          } @else {
+            <ng-container><mat-icon>upload</mat-icon> Subir archivo</ng-container>
+          }
+        </button>
+      </div>
+    }
+
+    @if (uploading()) {
+      <mat-progress-bar mode="indeterminate" class="upload-progress"></mat-progress-bar>
+    }
+
+    @if (result()) {
+      <div class="upload-results">
+        <div class="result-summary">
+          <div class="result-item success">
+            <span class="material-icons-outlined">check_circle</span>
+            <strong>{{ result()!.created }}</strong> creados
+          </div>
+          <div class="result-item updated">
+            <span class="material-icons-outlined">update</span>
+            <strong>{{ result()!.updated }}</strong> actualizados
+          </div>
+          @if (result()!.errors && result()!.errors.length > 0) {
+            <div class="result-item error">
+              <span class="material-icons-outlined">error</span>
+              <strong>{{ result()!.errors.length }}</strong> errores
+            </div>
+          }
+        </div>
+
+        @if (result()!.errors && result()!.errors.length > 0) {
+          <div class="errors-list">
+            <h4>Detalle de errores:</h4>
+            @for (err of result()!.errors; track err.row) {
+              <div class="error-row">
+                <span class="row-num">Fila {{ err.row }}</span>
+                <span>{{ err.message }}</span>
+              </div>
+            }
+          </div>
+        }
+      </div>
+    }
+  </mat-card>
+</div>

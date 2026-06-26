@@ -1,0 +1,137 @@
+/* Carga Masiva de Libros — estilos específicos del componente */
+
+.page-container {
+  max-width: 800px;
+}
+
+.upload-card {
+  border-radius: var(--radius, 12px) !important;
+  box-shadow: var(--shadow-sm) !important;
+  padding: 24px !important;
+}
+
+.upload-zone {
+  border: 2px dashed var(--gray-300, #ccc);
+  border-radius: var(--radius, 12px);
+  padding: 48px 24px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  background: var(--gray-100, #f0f0f0);
+}
+
+.upload-zone:hover,
+.upload-zone.drag-over {
+  border-color: var(--secondary, #e2b04a);
+  background: rgba(226, 176, 74, 0.05);
+}
+
+.upload-icon {
+  font-size: 64px !important;
+  color: var(--gray-300, #ccc);
+  display: block;
+  margin-bottom: 16px;
+}
+
+.upload-icon.selected {
+  color: var(--secondary, #e2b04a);
+  font-size: 48px !important;
+}
+
+.upload-zone h3 {
+  font-family: 'Poppins', sans-serif;
+  font-size: 1.1rem;
+  color: var(--primary, #1a1a2e);
+  margin-bottom: 4px;
+}
+
+.upload-zone p {
+  font-size: 0.9rem;
+  color: var(--gray-500, #888);
+}
+
+.file-hint {
+  display: block;
+  margin-top: 12px;
+  font-size: 0.8rem;
+  color: var(--gray-500, #888);
+}
+
+.upload-actions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-top: 24px;
+}
+
+.store-select {
+  flex: 1;
+}
+
+.btn-upload {
+  background: var(--secondary, #e2b04a) !important;
+  color: var(--primary, #1a1a2e) !important;
+  border-radius: 8px !important;
+  font-weight: 600;
+  padding: 10px 24px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.upload-progress {
+  margin-top: 16px;
+}
+
+.upload-results {
+  margin-top: 24px;
+}
+
+.result-summary {
+  display: flex;
+  gap: 24px;
+  margin-bottom: 16px;
+}
+
+.result-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.95rem;
+}
+
+.result-item.success .material-icons-outlined { color: #28ca42; }
+.result-item.updated .material-icons-outlined { color: var(--secondary, #e2b04a); }
+.result-item.error .material-icons-outlined { color: #c62828; }
+
+.errors-list {
+  background: #fff5f5;
+  border-radius: 8px;
+  padding: 16px;
+  border: 1px solid #fecdd3;
+}
+
+.errors-list h4 {
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.9rem;
+  color: #c62828;
+  margin-bottom: 12px;
+}
+
+.error-row {
+  display: flex;
+  gap: 12px;
+  padding: 8px 0;
+  border-bottom: 1px solid #fecdd3;
+  font-size: 0.85rem;
+}
+
+.error-row:last-child {
+  border-bottom: none;
+}
+
+.row-num {
+  font-weight: 600;
+  color: #c62828;
+  min-width: 60px;
+}

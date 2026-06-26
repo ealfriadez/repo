@@ -1,0 +1,119 @@
+<div class="chat-layout">
+  <main class="chat-main">
+    <!-- Messages -->
+    <div class="messages-container" #messagesContainer>
+      @if (messages().length === 0) {
+        <!-- Empty State -->
+        <div class="empty-state">
+          <span class="material-icons-outlined empty-icon">auto_awesome</span>
+          <h3>¿En que puedo ayudarte hoy?</h3>
+          <p>Preguntame sobre libros, recomendaciones o reportes de ventas.</p>
+          <div class="suggestions-grid">
+            @for (suggestion of exampleSuggestions; track suggestion) {
+              <button class="suggestion-card" (click)="sendMessage(suggestion)">
+                <span class="material-icons-outlined">lightbulb</span>
+                <span>{{ suggestion }}</span>
+              </button>
+            }
+          </div>
+        </div>
+      } @else {
+        <!-- Message Bubbles -->
+        @for (msg of messages(); track $index) {
+          <div class="message-row" [class.user]="msg.role === 'user'" [class.assistant]="msg.role === 'assistant'">
+            <div class="avatar">
+              @if (msg.role === 'user') {
+                <span class="material-icons-outlined">person</span>
+              } @else {
+                <span class="material-icons-outlined">smart_toy</span>
+              }
+            </div>
+            <div class="message-content">
+              <div class="message-bubble">
+                <p class="message-text">{{ msg.content }}</p>
+
+                <!-- Book Cards -->
+                @if (msg.books && msg.books.length > 0) {
+                  <div class="book-cards">
+                    <h4><span class="material-icons-outlined">menu_book</span> Libros encontrados</h4>
+                    <div class="cards-grid">
+                      @for (book of msg.books; track book.title) {
+                        <div class="chat-book-card">
+                          <div class="chat-book-title">{{ book.title }}</div>
+                          <div class="chat-book-author">{{ book.author }}</div>
+                          <div class="book-details">
+                            <span class="genre-chip">{{ book.genre }}</span>
+                            <span class="price">{{ book.price }}</span>
+                            <span class="stock" [class.low]="book.stock < 5">Stock: {{ book.stock }}</span>
+                          </div>
+                        </div>
+                      }
+                    </div>
+                  </div>
+                }
+
+                <!-- Chart Data -->
+                @if (msg.chartData && msg.chartData.length > 0) {
+                  <div class="chart-section">
+                    <h4><span class="material-icons-outlined">bar_chart</span> Datos del reporte</h4>
+                    <div class="chart-bars">
+                      @for (item of msg.chartData; track item.label) {
+                        <div class="chart-bar-row">
+                          <span class="chart-label">{{ item.label }}</span>
+                          <div class="chart-bar-track">
+                            <div class="chart-bar-fill" [style.width.%]="(item.value / getMaxChartValue(msg.chartData!)) * 100"></div>
+                          </div>
+                          <span class="chart-value">S/. {{ item.value.toFixed(2) }}</span>
+                        </div>
+                      }
+                    </div>
+                  </div>
+                }
+              </div>
+              <span class="timestamp">{{ formatTime(msg.timestamp) }}</span>
+            </div>
+          </div>
+        }
+
+        <!-- Typing Indicator -->
+        @if (loading()) {
+          <div class="message-row assistant">
+            <div class="avatar">
+              <span class="material-icons-outlined">smart_toy</span>
+            </div>
+            <div class="message-content">
+              <div class="message-bubble typing-bubble">
+                <div class="typing-indicator">
+                  <span class="dot"></span>
+                  <span class="dot"></span>
+                  <span class="dot"></span>
+                </div>
+              </div>
+            </div>
+          </div>
+        }
+      }
+    </div>
+
+    <!-- Input Area -->
+    <div class="input-area">
+      <div class="input-wrapper">
+        <form [formGroup]="chatForm">
+          <textarea
+            formControlName="message"
+            (keydown)="onKeydown($event)"
+            placeholder="Escribe tu mensaje..."
+            rows="1"
+            [disabled]="loading()">
+          </textarea>
+        </form>
+        <button
+          class="send-btn"
+          (click)="sendMessage()"
+          [disabled]="!chatForm.get('message')?.value?.trim() || loading()">
+          <span class="material-icons-outlined">send</span>
+        </button>
+      </div>
+    </div>
+  </main>
+</div>

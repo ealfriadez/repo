@@ -1,0 +1,142 @@
+@if (!loading() && book(); as b) {
+  <div class="detail-container">
+    <div class="detail-content">
+      <div class="book-image">
+        @if (b.imageUrl) {
+          <img [src]="apiUrl + b.imageUrl" [alt]="b.title">
+        } @else {
+          <div class="no-image">
+            <mat-icon>menu_book</mat-icon>
+          </div>
+        }
+      </div>
+
+      <div class="book-info">
+        <h1>{{ b.title }}</h1>
+        <p class="author">por {{ b.authorFullName }}</p>
+        <mat-chip-set>
+          <mat-chip>{{ b.genre }}</mat-chip>
+        </mat-chip-set>
+        <p class="price">S/. {{ b.price }}</p>
+        <p class="stock" [class.low-stock]="b.stock <= 5">
+          {{ b.stock > 0 ? b.stock + ' disponibles' : 'Agotado' }}
+        </p>
+        @if (b.description) {
+          <p class="description">{{ b.description }}</p>
+        }
+
+        @if (authService.isLoggedIn() && authService.isCustomer()) {
+          <button mat-raised-button class="btn-cart" (click)="addToCart()" [disabled]="b.stock === 0">
+            <mat-icon>add_shopping_cart</mat-icon>
+            {{ b.stock > 0 ? 'Agregar al carrito' : 'Agotado' }}
+          </button>
+        } @else if (!authService.isLoggedIn()) {
+          <p class="login-prompt">
+            <a routerLink="/login" class="login-link">
+              <mat-icon>login</mat-icon> Inicia sesión para comprar
+            </a>
+          </p>
+        }
+
+      </div>
+    </div>
+
+    <!-- Reviews Section -->
+    <section class="reviews-section">
+      <h2>Reseñas</h2>
+
+      <div class="reviews-layout">
+        <!-- Left: Form or My Review -->
+        @if (authService.isLoggedIn() && authService.isCustomer()) {
+          <div class="review-form-panel">
+            @if (myReview() && !editingReview()) {
+              <!-- My existing review -->
+              <h3>Tu reseña</h3>
+              <div class="my-review">
+                <div class="review-stars">
+                  @for (s of stars; track s) {
+                    <span class="material-icons-outlined star-icon" [class.filled]="s <= myReview()!.rating">
+                      {{ s <= myReview()!.rating ? 'star' : 'star_border' }}
+                    </span>
+                  }
+                </div>
+                <p class="my-review-comment">{{ myReview()!.comment }}</p>
+                <div class="my-review-actions">
+                  <button mat-button class="btn-edit" (click)="editReview()">
+                    <mat-icon>edit</mat-icon> Editar
+                  </button>
+                  <button mat-button class="btn-delete" (click)="deleteReview()">
+                    <mat-icon>delete</mat-icon> Eliminar
+                  </button>
+                </div>
+              </div>
+            } @else {
+              <!-- Form to create or edit -->
+              <h3>{{ editingReview() ? 'Editar reseña' : 'Escribe tu reseña' }}</h3>
+              <div class="star-rating">
+                @for (star of stars; track star) {
+                  <span class="star" [class.filled]="star <= reviewRating()" (click)="setRating(star)">
+                    <span class="material-icons-outlined">{{ star <= reviewRating() ? 'star' : 'star_border' }}</span>
+                  </span>
+                }
+                @if (reviewRating() === 0) {
+                  <span class="rating-hint">Selecciona una calificacion (1-5)</span>
+                }
+              </div>
+              <form [formGroup]="reviewForm">
+                <mat-form-field appearance="outline" class="full-width">
+                  <mat-label>Comentario</mat-label>
+                  <textarea matInput formControlName="comment" rows="4"></textarea>
+                  @if (reviewForm.get('comment')?.invalid && reviewForm.get('comment')?.touched) {
+                    <mat-error>El comentario es obligatorio</mat-error>
+                  }
+                </mat-form-field>
+              </form>
+              <button mat-raised-button class="btn-submit-review" (click)="submitReview()" [disabled]="reviewRating() === 0 || reviewForm.invalid || submittingReview()">
+                @if (submittingReview()) { Guardando... } @else if (editingReview()) { Actualizar reseña } @else { Publicar reseña }
+              </button>
+              @if (editingReview()) {
+                <button mat-button class="btn-cancel" (click)="cancelEdit()">Cancelar</button>
+              }
+            }
+          </div>
+        }
+
+        <!-- Right: Other reviews -->
+        <div class="reviews-list-panel">
+          @if (otherReviews().length === 0 && !myReview()) {
+            <p class="no-reviews">Aún no hay reseñas para este libro. ¡Sé el primero!</p>
+          } @else if (otherReviews().length === 0 && myReview()) {
+            <p class="no-reviews">No hay otras reseñas aún.</p>
+          }
+          @for (review of otherReviews(); track review.id) {
+            <div class="review-card">
+              <div class="review-header">
+                <div class="reviewer-info">
+                  <div class="reviewer-avatar">{{ getInitials(review.userName) }}</div>
+                  <div>
+                    <span class="reviewer-name">{{ getDisplayName(review.userName) }}</span>
+                    <div class="review-stars">
+                      @for (s of stars; track s) {
+                        <span class="material-icons-outlined star-icon" [class.filled]="s <= review.rating">
+                          {{ s <= review.rating ? 'star' : 'star_border' }}
+                        </span>
+                      }
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <p class="review-comment">{{ review.comment }}</p>
+            </div>
+          }
+        </div>
+      </div>
+    </section>
+  </div>
+}
+
+@if (loading()) {
+  <div class="loading">
+    <p>Cargando...</p>
+  </div>
+}

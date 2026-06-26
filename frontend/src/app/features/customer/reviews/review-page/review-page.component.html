@@ -1,0 +1,129 @@
+<div class="review-layout">
+  <!-- Panel izquierdo: libros -->
+  <div class="books-panel">
+    <h2><mat-icon>menu_book</mat-icon> Selecciona un libro</h2>
+
+    <div class="books-grid">
+      @if (loadingBooks()) {
+        <div class="loading"><mat-spinner diameter="40"></mat-spinner></div>
+      } @else {
+        @for (book of books(); track book.id) {
+          <div class="book-item" [class.selected]="selectedBook()?.id === book.id"
+               (click)="selectBook(book)">
+            <div class="book-info">
+              <span class="book-title">{{ book.title }}</span>
+              <span class="book-author">{{ book.authorFullName }}</span>
+            </div>
+            <span class="book-genre">{{ book.genre }}</span>
+          </div>
+        }
+      }
+    </div>
+
+    <mat-paginator
+      [length]="totalBooks()"
+      [pageSize]="8"
+      [pageIndex]="page()"
+      (page)="onPageChange($event)"
+      showFirstLastButtons>
+    </mat-paginator>
+  </div>
+
+  <!-- Panel derecho: reseñas + formulario -->
+  <div class="reviews-panel">
+    @if (!selectedBook()) {
+      <div class="empty-state">
+        <mat-icon>rate_review</mat-icon>
+        <p>Selecciona un libro para ver y dejar reseñas</p>
+      </div>
+    } @else {
+      <!-- Info del libro seleccionado -->
+      <mat-card class="selected-book-card">
+        <mat-card-content>
+          <h3>{{ selectedBook()!.title }}</h3>
+          <p class="book-meta">
+            <span><mat-icon>person</mat-icon> {{ selectedBook()!.authorFullName }}</span>
+            <span><mat-icon>category</mat-icon> {{ selectedBook()!.genre }}</span>
+            <span class="price">S/. {{ selectedBook()!.price }}</span>
+          </p>
+        </mat-card-content>
+      </mat-card>
+
+      <!-- Botón escribir reseña -->
+      @if (!showForm()) {
+        <button mat-raised-button color="primary" class="write-btn" (click)="openForm()">
+          <mat-icon>edit</mat-icon> Escribir reseña
+        </button>
+      }
+
+      <!-- Formulario de reseña -->
+      @if (showForm()) {
+        <mat-card class="review-form-card">
+          <mat-card-header>
+            <mat-card-title>Nueva reseña</mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            <form [formGroup]="reviewForm">
+              <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Calificación</mat-label>
+                <mat-select formControlName="rating">
+                  @for (r of ratings; track r) {
+                    <mat-option [value]="r">
+                      @for (s of getStars(r); track $index) { <span class="star">&#9733;</span> }
+                      @for (s of getEmptyStars(r); track $index) { <span class="star-empty">&#9734;</span> }
+                      ({{ r }}/5)
+                    </mat-option>
+                  }
+                </mat-select>
+              </mat-form-field>
+
+              <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Comentario</mat-label>
+                <textarea matInput formControlName="comment" rows="4"
+                          placeholder="Escribe tu opinión sobre el libro..."></textarea>
+              </mat-form-field>
+            </form>
+
+            <div class="form-actions">
+              <button mat-button (click)="cancelForm()">Cancelar</button>
+              <button mat-raised-button color="primary" (click)="submitReview()"
+                      [disabled]="saving() || reviewForm.invalid">
+                @if (saving()) { <mat-spinner diameter="20"></mat-spinner> }
+                <mat-icon>send</mat-icon> Publicar
+              </button>
+            </div>
+          </mat-card-content>
+        </mat-card>
+      }
+
+      <mat-divider></mat-divider>
+
+      <!-- Lista de reseñas -->
+      <h3 class="reviews-title">
+        <mat-icon>reviews</mat-icon>
+        Reseñas ({{ bookReviews().length }})
+      </h3>
+
+      @if (loadingReviews()) {
+        <div class="loading"><mat-spinner diameter="32"></mat-spinner></div>
+      } @else if (bookReviews().length === 0) {
+        <p class="no-reviews">Aún no hay reseñas para este libro. ¡Sé el primero!</p>
+      } @else {
+        @for (review of bookReviews(); track review.id) {
+          <mat-card class="review-card">
+            <mat-card-content>
+              <div class="review-header">
+                <strong>{{ review.userName }}</strong>
+                <span class="review-stars">
+                  @for (s of getStars(review.rating); track $index) { <span class="star">&#9733;</span> }
+                  @for (s of getEmptyStars(review.rating); track $index) { <span class="star-empty">&#9734;</span> }
+                </span>
+              </div>
+              <p class="review-comment">{{ review.comment }}</p>
+            </mat-card-content>
+          </mat-card>
+        }
+      }
+    }
+  </div>
+</div>

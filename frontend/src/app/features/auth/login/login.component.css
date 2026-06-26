@@ -1,0 +1,7 @@
+/* Login — estilos especificos del componente */
+/* Los estilos de diseno de autenticacion (auth-container, auth-branding, etc.) estan en styles.css */
+
+:host {
+  display: block;
+  height: 100vh;
+}

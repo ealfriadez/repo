@@ -1,0 +1,68 @@
+<div class="form-container">
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>
+        @if (isEditMode()) { Editar Reseña } @else { Nueva Reseña }
+      </mat-card-title>
+    </mat-card-header>
+
+    <mat-card-content>
+      <form [formGroup]="reviewForm" (ngSubmit)="saveReview()">
+        <!-- Búsqueda de libro con autocomplete -->
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Buscar libro</mat-label>
+          <input matInput
+            formControlName="bookSearch"
+            (input)="onBookSearchInput()"
+            [matAutocomplete]="autoBook"
+            placeholder="Escribe para buscar..."
+            required>
+          <mat-icon matSuffix>search</mat-icon>
+          <mat-autocomplete #autoBook="matAutocomplete" (optionSelected)="selectBook($event.option.value)">
+            @for (book of filteredBooks(); track book.id) {
+              <mat-option [value]="book">
+                <span class="book-option">
+                  <strong>{{ book.title }}</strong>
+                  <small>{{ book.authorFullName }}</small>
+                </span>
+              </mat-option>
+            }
+          </mat-autocomplete>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Calificación</mat-label>
+          <mat-select formControlName="rating">
+            @for (r of ratings; track r) {
+              <mat-option [value]="r">
+                @for (s of getStarsArray(r); track $index) {
+                  <span class="star-icon">&#9733;</span>
+                }
+                @for (s of getEmptyStarsArray(r); track $index) {
+                  <span class="star-empty">&#9734;</span>
+                }
+                <span class="rating-text">({{ r }}/5)</span>
+              </mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Comentario</mat-label>
+          <textarea matInput formControlName="comment" rows="4"
+                    placeholder="Escribe tu opinión sobre el libro..."></textarea>
+        </mat-form-field>
+
+        <div class="form-actions">
+          <button mat-stroked-button type="button" routerLink="/reviews">
+            <mat-icon>arrow_back</mat-icon> Volver
+          </button>
+          <button mat-raised-button color="primary" type="submit" [disabled]="reviewForm.invalid || selectedBookId() === 0">
+            <mat-icon>save</mat-icon>
+            @if (isEditMode()) { Actualizar } @else { Publicar Reseña }
+          </button>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+</div>

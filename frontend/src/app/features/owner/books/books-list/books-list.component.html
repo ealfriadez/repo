@@ -1,0 +1,85 @@
+<div class="page-container">
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>
+        Libros ({{ totalElements() }})
+      </mat-card-title>
+      <span class="spacer"></span>
+      <button mat-raised-button color="primary" routerLink="/owner/books/new">
+        <mat-icon>add</mat-icon> Nuevo Libro
+      </button>
+    </mat-card-header>
+
+    <mat-card-content>
+      <form [formGroup]="searchForm">
+        <mat-form-field appearance="outline" class="filter-field">
+          <mat-label>Buscar por titulo o autor</mat-label>
+          <input matInput formControlName="search" (keyup.enter)="onSearch()" placeholder="Filtrar...">
+          <button matSuffix mat-icon-button (click)="onSearch()">
+            <mat-icon>search</mat-icon>
+          </button>
+        </mat-form-field>
+      </form>
+
+      <table mat-table [dataSource]="books()" class="full-width">
+        <ng-container matColumnDef="id">
+          <th mat-header-cell *matHeaderCellDef>ID</th>
+          <td mat-cell *matCellDef="let book">{{ book.id }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="title">
+          <th mat-header-cell *matHeaderCellDef>Titulo</th>
+          <td mat-cell *matCellDef="let book">{{ book.title }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="authorFullName">
+          <th mat-header-cell *matHeaderCellDef>Autor</th>
+          <td mat-cell *matCellDef="let book">{{ book.authorFullName }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="genre">
+          <th mat-header-cell *matHeaderCellDef>Genero</th>
+          <td mat-cell *matCellDef="let book">{{ book.genre }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="price">
+          <th mat-header-cell *matHeaderCellDef>Precio</th>
+          <td mat-cell *matCellDef="let book">{{ book.price | currency:'PEN':'S/. ' }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="stock">
+          <th mat-header-cell *matHeaderCellDef>Stock</th>
+          <td mat-cell *matCellDef="let book">{{ book.stock }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef>Acciones</th>
+          <td mat-cell *matCellDef="let book">
+            <button mat-icon-button color="primary" [routerLink]="['/owner/books/edit', book.id]">
+              <mat-icon>edit</mat-icon>
+            </button>
+            <button mat-icon-button color="warn" (click)="deleteBook(book.id)">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+
+      @if (books().length === 0) {
+        <p class="empty-state">No se encontraron libros.</p>
+      }
+
+      <mat-paginator
+        [length]="totalElements()"
+        [pageSize]="pageSize()"
+        [pageIndex]="pageIndex()"
+        [pageSizeOptions]="[5, 10, 25]"
+        (page)="onPageChange($event)"
+        showFirstLastButtons>
+      </mat-paginator>
+    </mat-card-content>
+  </mat-card>
+</div>
