@@ -36,10 +36,11 @@ services:
         value: 8084
       - key: PAYPAL_BASE_URL
         value: https://api-m.sandbox.paypal.com
-staticSites:
-  - name: bookstore-frontend
+  - type: web
+    name: bookstore-frontend
+    env: static
     buildCommand: npm install && npm run build
-    publishPath: dist/bookstore-frontend # Ajusta al nombre real de tu carpeta de compilación
+    staticPublishPath: dist/bookstore-frontend # Ajusta al nombre real de tu carpeta de compilación
     routes:
       - type: rewrite
         source: /*
