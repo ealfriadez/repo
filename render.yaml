@@ -41,7 +41,7 @@ services:
     rootDir: frontend
     env: static
     buildCommand: npm install && npm run build -- --base-href /
-    staticPublishPath: dist/frontend # Ajusta al nombre real de tu carpeta de compilación
+    staticPublishPath: dist/frontend/browser # Ajusta al nombre real de tu carpeta de compilación
     routes:
       - type: rewrite
         source: /*
