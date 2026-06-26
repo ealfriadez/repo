@@ -41,7 +41,7 @@ services:
     rootDir: frontend
     env: static
     buildCommand: npm install && npm run build
-    staticPublishPath: dist/bookstore-frontend # Ajusta al nombre real de tu carpeta de compilación
+    staticPublishPath: frontend/dist/frontend # Ajusta al nombre real de tu carpeta de compilación
     routes:
       - type: rewrite
         source: /*
