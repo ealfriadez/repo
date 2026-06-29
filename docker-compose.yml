@@ -18,21 +18,6 @@ services:
       timeout: 5s
       retries: 5
 
-  pgadmin:
-    image: dpage/pgadmin4:latest
-    container_name: bookstore-pgadmin
-    restart: unless-stopped
-    environment:
-      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_EMAIL:-admin@bookstore.com}
-      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_PASSWORD:-admin123}
-    ports:
-      - "5050:80"
-    depends_on:
-      postgres:
-        condition: service_healthy
-    volumes:
-      - pgadmin_data:/var/lib/pgadmin
-
   api:
     build: ./api
     container_name: bookstore-api
@@ -42,8 +27,7 @@ services:
     env_file:
       - .env                 # Spring Boot lee todas las variables desde aquí
     environment:
-      #DB_HOST: postgres      # override: dentro de docker el host es el nombre del servicio
-      DB_HOST: aws-1-us-west-2.pooler.supabase.com      # override: dentro de docker el host es el nombre del servicio para SUPABASE
+      DB_HOST: postgres      # override: dentro de docker el host es el nombre del servicio
       DB_PORT: 5432          # override: puerto interno de la red docker
       SPRING_PROFILES_ACTIVE: prod   # activa application-prod.yaml
     depends_on:

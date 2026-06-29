@@ -1,8 +1,7 @@
 # Perfil de producción — sin logs innecesarios
 spring:
   datasource:
-    #url: jdbc:postgresql://${DB_HOST}:${DB_PORT:5432}/${DB_NAME}?sslmode=disable
-    url: jdbc:postgresql://${DB_HOST}:${DB_PORT:5432}/${DB_NAME}?sslmode=require  #parametros necesarios para SUPABASE
+    url: jdbc:postgresql://${DB_HOST}:${DB_PORT:5432}/${DB_NAME}?sslmode=disable
 
   jpa:
     show-sql: false
