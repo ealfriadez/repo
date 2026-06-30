@@ -17,6 +17,10 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
 
   return next(authReq).pipe(
     catchError((error: HttpErrorResponse) => {
+
+      console.log("Error status:", error.status);
+      console.log("Error completo:", error);
+
       let message = 'Ha ocurrido un error inesperado';
 
       const backendMessage = error.error?.detail || error.error?.message;
@@ -40,6 +44,9 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
           break;
         case 409:
           message = backendMessage || 'Conflicto con los datos enviados';
+          break;
+        case 413:
+          message = 'El archivo es demasiado pesado, intenta con uno más pequeño. (máx. 5MB)';
           break;
         case 500:
           message = 'Error del servidor. Intenta mas tarde';
