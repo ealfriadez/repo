@@ -36,11 +36,12 @@ public class FileStorageUtil {
         Path targetPath = bookImagesPath.resolve(fileName);
 
         // Compress and resize to max 800x800 maintaining aspect ratio
-        Thumbnails.of(file.getInputStream())
+        /*Thumbnails.of(file.getInputStream())
                 .size(800, 800)
                 .keepAspectRatio(true)
                 .outputQuality(0.8)
-                .toFile(targetPath.toFile());
+                .toFile(targetPath.toFile());*/
+        Files.copy(file.getInputStream(), targetPath, StandardCopyOption.REPLACE_EXISTING);
 
         return "/uploads/books/" + fileName;
     }

@@ -122,7 +122,7 @@ public class BookServiceImpl implements IBookService {
                 if (book.getImageUrl() != null) fileStorageUtil.deleteBookImage(book.getImageUrl());
                 book.setImageUrl(fileStorageUtil.saveBookImage(image, book.getSlug()));
             } catch (IOException e) {
-                throw new BusinessException("Error al guardar la imagen");
+                throw new BusinessException("Error al guardar la imagen " + e.getMessage());
             }
         }
         if (bookFile != null && !bookFile.isEmpty()) {
