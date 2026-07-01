@@ -73,10 +73,9 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(MaxUploadSizeExceededException.class)
-    public ResponseEntity<String> handleMaxSizeException(MaxUploadSizeExceededException exc) {
-        // Este mensaje llegará a tu frontend
-        return ResponseEntity
-                .status(HttpStatus.PAYLOAD_TOO_LARGE)
-                .body("El archivo es demasiado grande. El límite permitido es de 5MB.");
+    public ProblemDetail handleMaxSizeException(MaxUploadSizeExceededException exc) {
+        ProblemDetail problem = ProblemDetail.forStatusAndDetail(HttpStatus.PAYLOAD_TOO_LARGE, "El archivo es demasiado grande. El límite permitido es de 5MB.");
+        problem.setTitle("Error interno del servidor");
+        return problem;
     }
 }
