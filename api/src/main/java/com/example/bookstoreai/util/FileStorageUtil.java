@@ -1,7 +1,7 @@
 package com.example.bookstoreai.util;
 
+import com.example.bookstoreai.exception.BusinessException;
 import jakarta.annotation.PostConstruct;
-import net.coobird.thumbnailator.Thumbnails;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -31,16 +31,15 @@ public class FileStorageUtil {
     }
 
     public String saveBookImage(MultipartFile file, String slug) throws IOException {
-        String extension = getExtension(file.getOriginalFilename());
+        String originalFilename = file.getOriginalFilename();
+
+        if(originalFilename == null || !isAllowedExtensionImage(originalFilename)) throw new BusinessException("Formato de imagen no permitido. Solo se aceptan JPG, JPEG o PNG.");
+
+        String extension = getExtension(originalFilename);
         String fileName = slug + extension;
         Path targetPath = bookImagesPath.resolve(fileName);
 
-        // Compress and resize to max 800x800 maintaining aspect ratio
-        Thumbnails.of(file.getInputStream())
-                .size(800, 800)
-                .keepAspectRatio(true)
-                .outputQuality(0.8)
-                .toFile(targetPath.toFile());
+        Files.copy(file.getInputStream(), targetPath, StandardCopyOption.REPLACE_EXISTING);
 
         return "/uploads/books/" + fileName;
     }
@@ -56,11 +55,21 @@ public class FileStorageUtil {
     }
 
     public String saveBookFile(MultipartFile file, String slug) throws IOException {
+        String originalFilename = file.getOriginalFilename();
+
+        if(originalFilename == null || !isAllowedExtensionBook(originalFilename)) throw new BusinessException("Formato de imagen no permitido. Solo se aceptan JPDF o EPUB.");
+
         String extension = getExtension(file.getOriginalFilename());
         String fileName = slug + extension;
         Path targetPath = bookFilesPath.resolve(fileName);
+
         Files.copy(file.getInputStream(), targetPath, StandardCopyOption.REPLACE_EXISTING);
         return "/uploads/files/" + fileName;
+    }
+
+    private String getExtension(String filename) {
+        if (filename == null || !filename.contains(".")) throw new BusinessException("El archivo no tiene una extension válida.");
+        return filename.substring(filename.lastIndexOf("."));
     }
 
     public Path getBookFilePath(String fileUrl) {
@@ -78,8 +87,13 @@ public class FileStorageUtil {
         }
     }
 
-    private String getExtension(String filename) {
-        if (filename == null || !filename.contains(".")) return ".jpg";
-        return filename.substring(filename.lastIndexOf("."));
+    private boolean isAllowedExtensionImage(String filename) {
+        String ext = filename.toLowerCase();
+        return ext.endsWith(".jpg") || ext.endsWith(".jpeg") || ext.endsWith(".png");
+    }
+
+    private boolean isAllowedExtensionBook(String filename) {
+        String ext = filename.toLowerCase();
+        return ext.endsWith(".pdf") || ext.endsWith(".epub");
     }
 }
