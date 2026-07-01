@@ -49,10 +49,11 @@ public class BookImportServiceImpl implements IBookImportService {
                 try {
                     String title = ExcelParserUtil.getString(row.getCell(0));
                     String authorName = ExcelParserUtil.getString(row.getCell(1));
-                    String genre = ExcelParserUtil.getString(row.getCell(2));
-                    BigDecimal price = ExcelParserUtil.getNumber(row.getCell(3));
-                    int stock = ExcelParserUtil.getNumber(row.getCell(4)).intValue();
-                    String description = ExcelParserUtil.getString(row.getCell(5));
+                    String nationality = ExcelParserUtil.getString(row.getCell(2));
+                    String genre = ExcelParserUtil.getString(row.getCell(3));
+                    BigDecimal price = ExcelParserUtil.getNumber(row.getCell(4));
+                    int stock = ExcelParserUtil.getNumber(row.getCell(5)).intValue();
+                    String description = ExcelParserUtil.getString(row.getCell(6));
 
                     if (title == null || title.isBlank()) {
                         errors.add(new BulkError(i + 1, "Titulo es requerido"));
@@ -63,7 +64,12 @@ public class BookImportServiceImpl implements IBookImportService {
                         continue;
                     }
 
-                    Author author = findOrCreateAuthor(authorName);
+                    if (nationality == null || nationality.isBlank()) {
+                        errors.add(new BulkError(i + 1, "La nacionalidad es requerida"));
+                        continue;
+                    }
+
+                    Author author = findOrCreateAuthor(authorName, nationality);
 
                     Optional<Book> existingBook = bookRepository.findByTitle(title);
                     if (existingBook.isPresent()) {
@@ -98,7 +104,7 @@ public class BookImportServiceImpl implements IBookImportService {
         return new BulkUploadResponse(created, updated, errors);
     }
 
-    private Author findOrCreateAuthor(String fullName) {
+    private Author findOrCreateAuthor(String fullName, String nationality) {
         if (fullName == null || fullName.isBlank()) {
             fullName = "Autor Desconocido";
         }
@@ -111,6 +117,7 @@ public class BookImportServiceImpl implements IBookImportService {
                     Author author = Author.builder()
                             .firstName(firstName)
                             .lastName(lastName)
+                            .nationality(nationality)
                             .build();
                     return authorRepository.save(author);
                 });
