@@ -2,7 +2,6 @@ package com.example.bookstoreai.util;
 
 import com.example.bookstoreai.exception.BusinessException;
 import jakarta.annotation.PostConstruct;
-import net.coobird.thumbnailator.Thumbnails;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
